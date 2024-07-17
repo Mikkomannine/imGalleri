@@ -48,7 +48,6 @@ const userSchema = new Schema({
   followers: [{type: ObjectId, ref: 'User'}],
   following: [{type: ObjectId, ref: 'User'}],
 
-  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   liked: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Media' }],
 })
 

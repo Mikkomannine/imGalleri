@@ -59,6 +59,20 @@
     align-items: center;
 }
 
+.image-frame {
+    width: 600px;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensures the image does not overflow the frame */
+}
+
+.image-frame img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures the image maintains aspect ratio */
+}
 @keyframes easeInOut {
     0%, 100% {
       opacity: 0;

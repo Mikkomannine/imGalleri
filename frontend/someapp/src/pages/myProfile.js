@@ -118,45 +118,6 @@ const MyProfile = () => {
     }
   };
 
- /* return (
-    <div className='myprofile'>
-      <div className='profilepicture'>
-      {imageUrl ? (
-         <img src={imageUrl} alt="Uploaded" />
-        ) : (
-         <p>No image found. Please upload an image.</p>
-        )}
-        <form className='bio-buttons' onSubmit={handleSubmit}>
-         <input className='bio-button' type="file" onChange={handleFileChange} />
-         <button className='bio-button' type="submit">Upload Image</button>
-         <Link to="/postform">
-      <button className='bio-button'>+</button>
-    </Link>
-       </form>
-    </div>
-    <div className = "followers">
-        <h2>Followers: {followers.length}</h2>
-        <button className='dropdown' onClick={() => setShowFollowers(!showFollowers)}>v</button> {/* Button to toggle followers list */
-        /*  {showFollowers && (
-            <>
-              <ul className='followerlist'>
-                <h2>Followers:</h2>
-                  {followers.map(follower => (
-                    <li key={follower._id}>{follower.email}</li> // Assuming the follower object has an _id and email
-                        ))}
-                        </ul>
-                    </>
-                  )}
-                </div>
-    <div className="posts">
-        {postArray.length === 0 && <h2>No Posts Found</h2>}
-        {postArray.map((postArray) => (
-          <PostDetails key={postArray._id} post={postArray} />
-        ))}
-      </div>
-    </div>
-  );
-};*/
 
 return (
   <div className='profile'>

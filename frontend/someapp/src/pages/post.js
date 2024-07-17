@@ -63,7 +63,7 @@ const Post = () => {
     <div className="post-wrapper">
         <div className = "post">
         <h1>{post.title}</h1>
-        <img src={post.imageUrl} alt={post.title} />
+            <img src={post.imageUrl} alt={post.title} />
         {isLiked ? (
                         <UnLikeButton userId={id} onLikeChange={handleLikeChange} />
                     ) : (
@@ -74,6 +74,7 @@ const Post = () => {
         <Link to={`/post/profile/${userId}`}>Profile</Link>
         </div>
         <div className='commentsection'>
+            {comments.length} comments
             {comments && comments.map((comment) => (
                 <CommentDetails key={comment._id} comment={comment}>
                 </CommentDetails>

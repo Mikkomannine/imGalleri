@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { use, post } = require('../app');
 
 
 const mediaSchema = new mongoose.Schema({
@@ -10,7 +11,7 @@ const mediaSchema = new mongoose.Schema({
     comments: [{
         text: { type: String, required: true },
         postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-        createdAt: { type: Date, default: Date.now }
+        createdAt: { type: Date, default: Date.now },
     }],
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
