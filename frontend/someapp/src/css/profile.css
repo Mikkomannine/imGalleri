@@ -1,0 +1,101 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+.profilepic{
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+.bio {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    margin-top: 50px;
+    background-color: #f9f9f9;
+    width: 1380px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px #ddd;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    position: relative;
+}
+
+.wrapper .followerlist {
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+    position: absolute;
+    margin-top: 50px;
+    top: 80%;
+    list-style-type: none;
+    background-color: #f9f9f9;
+    padding: 40px;
+    border-radius: 10px;
+}
+.wrapper .followerlist li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.follow {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-direction: row;
+    box-shadow: 0px 0px 8px #ddd;
+    border-radius: 10px;
+    border: rgb(47, 122, 214);
+    padding: 15px;
+    width: 100px;
+    background-color: rgb(47, 122, 214);
+}
+
+.unfollow {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    flex-direction: row;
+    box-shadow: 0px 0px 8px #ddd;
+    border-radius: 10px;
+    border: rgb(47, 122, 214);
+    padding: 15px;
+    width: 100px;
+    background-color: rgb(53, 214, 47);
+}
+
+.follow:hover {
+    background-color: rgb(99, 167, 223);
+}
+
+.unfollow:hover {
+    background-color: rgb(111, 226, 111);
+}
+
+.follow-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown {
+    height: 35px;
+    width: 35px;
+    background-color: #f9f9f9;
+    border-radius: 25%;
+    border: 1px solid #ddd;
+    box-shadow: 0px 0px 8px #ddd;
+    margin: 10px;
+}
