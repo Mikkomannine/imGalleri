@@ -113,6 +113,20 @@ p {
 
 .form-footer a:hover {
   text-decoration: underline;
+
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #fdd;
+  border: 1px solid red;
+  border-radius: 5px;
+  margin-top: 10px;
 }
 
 @media (min-width: 768px) {

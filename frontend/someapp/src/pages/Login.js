@@ -8,18 +8,21 @@ import '../css/login.css';
 
 const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
-  const email = useField("email");
+  const username = useField("username");
   const password = useField("password");
 
   const { login, error } = useLogin("http://localhost:3001/api/users/login");
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    await login({ email: email.value, password: password.value });
-    if (!error) {
+    await login({ username: username.value, password: password.value });
+    if (!error && localStorage.getItem("token")) {
       console.log("success");
       setIsAuthenticated(true);
       navigate("/");
+    }
+    else {
+      console.log(error);
     }
   };
   return (
@@ -35,10 +38,10 @@ const Login = ({ setIsAuthenticated }) => {
         <form onSubmit={handleLogin} className="login-form">
           <input
             type="text"
-            placeholder="email"
-            name="email"
+            placeholder="username"
+            name="username"
             required=""
-            {...email}
+            {...username}
           />
           <input
             type="password"
@@ -54,23 +57,14 @@ const Login = ({ setIsAuthenticated }) => {
             <a href="/">Forgot your password?</a>
           </div>
         </form>
+        {error && (
+        <div className={`error ${error ? 'show' : ''}`}>
+          <div>{error}!</div>
+        </div>
+      )}
       </div>
     </div>
   );
-}
-  /*return (
-    <div className="icon"> 
-      <img src={logo} alt="logo" />
-      <form className="login" onSubmit={handleFormSubmit}>
-        <h3>Login</h3>
-        <label>Email address:</label>
-        <input {...email} />
-        <label>Password:</label>
-        <input {...password} />
-        <button>Login</button>
-      </form>
-    </div>
-  );
-};*/
+};
 
 export default Login;

@@ -30,7 +30,7 @@ router.get("/followers/:id", requireAuth, getFollowers)
 
 router.patch('/upload/:id', upload.single('image'), requireAuth, currentTokenAuth, imageUpload)
 
-router.patch('/update/:id', requireAuth, updateUser)
+router.patch('/:id/edit', requireAuth, updateUser)
 
 router.get('/myprofile', getMe)
 

@@ -16,5 +16,5 @@ const mediaSchema = new mongoose.Schema({
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 }, { timestamps: true });
 
-module.exports = mongoose.model('Fruit', mediaSchema);
+module.exports = mongoose.model('Media', mediaSchema);
 

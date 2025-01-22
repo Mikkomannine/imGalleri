@@ -14,6 +14,7 @@ export default function useSignup(url) {
     });
     const user = await response.json();
 
+
     if (!response.ok) {
       console.log(user.error);
       setError(user.error);

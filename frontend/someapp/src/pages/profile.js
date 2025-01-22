@@ -88,7 +88,7 @@ const ProfilePage = () => {
                     <img className='profilepic' src={user?.imageUrl} alt='profile' />
                 </div>
                 <div className='wrapper'>
-                    <h2>{user?.email}</h2>
+                    <h2>{user?.username}</h2>
                     {isFollowing ? (
                         <UnfollowButton userId={id} onFollowChange={handleFollowChange} />
                     ) : (
@@ -103,7 +103,7 @@ const ProfilePage = () => {
                             <ul className='followerlist'>
                                 <h2>Followers:</h2>
                                 {followers.map(follower => (
-                                    <li key={follower._id}>{follower.email}</li> // Assuming the follower object has an _id and email
+                                    <li key={follower._id}>{follower.username}</li>
                                 ))}
                             </ul>
                         </>

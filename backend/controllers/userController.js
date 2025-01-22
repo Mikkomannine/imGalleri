@@ -9,15 +9,15 @@ const createToken = (_id) => {
 
 // login a user
 const loginUser = async (req, res) => {
-  const {email, password} = req.body
+  const {username, password} = req.body
 
   try {
-    const user = await User.login(email, password)
+    const user = await User.login(username, password)
 
     // create a token
     const token = createToken(user._id)
 
-    res.status(200).json({email, token})
+    res.status(200).json({username, token})
   } catch (error) {
     res.status(400).json({error: error.message})
   }
@@ -25,15 +25,15 @@ const loginUser = async (req, res) => {
 
 // signup a user
 const signupUser = async (req, res) => {
-  const {email, password, firstName, lastName, role, phoneNumber, imageUrl} = req.body
+  const {username, email, password, firstName, lastName, phoneNumber, imageUrl} = req.body
 
   try {
-    const user = await User.signup(email, password, firstName, lastName, role, phoneNumber, imageUrl)
+    const user = await User.signup(username, email, password, firstName, lastName, phoneNumber, imageUrl)
 
     // create a token
     const token = createToken(user._id)
 
-    res.status(200).json({email, token})
+    res.status(200).json({username, token})
   } catch (error) {
     res.status(400).json({error: error.message})
   }
@@ -60,7 +60,7 @@ const unFollowUser = async (req, res) => {
 
 const getFollowers = async (req, res) => {
     try {
-        const user = await User.findById(req.params.id).populate('followers', 'email'); // Populate followers field with username
+        const user = await User.findById(req.params.id).populate('followers', 'username');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
@@ -76,12 +76,6 @@ const followUser = async (req, res) => {
         // Assuming req.params.id and req.body.userId are validated to be non-null, non-undefined, and valid ObjectId strings
         const userId = req.params.id;
         const currentUserId = req.user._id;
-
-      
-
-        if (userId === currentUserId) {
-            return res.status(400).json({ message: "You cannot follow yourself" });
-        }
 
         const userUpdateResult = await User.findByIdAndUpdate(userId, {
             $addToSet: { followers: currentUserId }

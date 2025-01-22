@@ -12,6 +12,7 @@ import UpdatePost from './pages/updatePost';
 import ProfilePage from './pages/profile';
 import Home from './pages/home';
 import Post from './pages/post';
+import EditProfilePage from './pages/EditProfilePage';
 import Layout from './components/layout';
 import { useLocation } from 'react-router-dom';
 
@@ -27,6 +28,7 @@ function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
     { path: "/post/:id", element: <Post /> },
     { path: "/:id/update", element: <UpdatePost /> },
     { path: "post/profile/:id", element: <ProfilePage /> },
+    { path: "/edit/profile/:id", element: <EditProfilePage /> },
     { path: "/login", element: <Login setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
     { path: "/signup", element: <Signup setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
   ];

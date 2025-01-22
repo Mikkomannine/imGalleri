@@ -6,6 +6,7 @@ import CommentDetails from '../components/commentDetails';
 import logo from './photo-gallery.png';
 import LikeButton from '../components/likeButton';
 import UnLikeButton from '../components/unlikeButton';
+import axios from 'axios';
 
 
 
@@ -16,6 +17,27 @@ const Post = () => {
     const [comments, setComments] = useState(null);
     const [isLiked, setisLiked] = useState(null);
     const [likes, setLikes] = useState(null);
+    const [comment, setComment] = useState('');
+
+    const handleCommentSubmit = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await axios.post(`http://localhost:3001/api/media/addComment/` + id, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+            if (response) {
+              console.log(response.data);
+              setComment('');
+            }
+          } catch (error) {
+              console.error("Error uploading comment", error);
+          }
+      };
+
 
     const checkLikedStatus = async () => {
         const response = await fetch(`http://localhost:3001/api/media/isLiked/${id}`,{
@@ -80,6 +102,15 @@ const Post = () => {
                 </CommentDetails>
             ))}
             </div>
+        <form className='commentUpload' onSubmit={handleCommentSubmit}>
+            <input
+                type="text"
+                placeholder="Add a comment..."
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+            />
+            <button type="submit">Comment</button>
+        </form>
       </div>
     );
   }

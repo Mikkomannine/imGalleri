@@ -135,23 +135,29 @@ return (
       <button className='bio-button'>+</button>
     </Link>
        </form>
-    </div>
+       <div className='bio-text'>
+          <p>{user?.bio}</p>
+          <Link to={`/edit/profile/${user?._id}`}>
+            <button>Edit Profile</button>
+          </Link>
+        </div>
           <div className='wrapper'>
-              <h2>{user?.email}</h2>
+              <h2>{user?.username}</h2>
               <div className='follow-wrap'>
               <h2>Followers: {followers.length}</h2>
-              <button className='dropdown' onClick={() => setShowFollowers(!showFollowers)}>v</button> {/* Button to toggle followers list */}
+              <button className='dropdown' onClick={() => setShowFollowers(!showFollowers)}>v</button>
               </div>
               {showFollowers && (
                   <>
                       <ul className='followerlist'>
                           <h2>Followers:</h2>
                           {followers.map(follower => (
-                              <li key={follower._id}>{follower.email}</li> // Assuming the follower object has an _id and email
+                              <li key={follower._id}>{follower.username}</li>
                           ))}
                       </ul>
                   </>
               )}
+              </div>
           </div>
       </div>
       <div className="posts">
