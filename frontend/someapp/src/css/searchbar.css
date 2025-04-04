@@ -32,7 +32,7 @@
     max-height: 300px;
     overflow-y: auto;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     margin-top: 10px;
   }
   
@@ -46,4 +46,14 @@
   
   .search-result:hover {
     background-color: #efefef;
+  }
+
+  @media screen and (max-width: 768px) {
+    .input-wrapper {
+      width: 200px;
+    }
+    .results-list {
+      width: 200px;
+    }
+    
   }

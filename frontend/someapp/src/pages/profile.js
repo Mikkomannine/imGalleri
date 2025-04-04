@@ -4,6 +4,7 @@ import FollowButton from '../components/followButton'; // Adjust the import path
 import UnfollowButton from '../components/unfollowButton'; // Adjust the import path as necessary
 import '../css/profile.css';
 import PostDetails from '../components/postDetails';
+import logo from './photo-gallery.png';
 
 
 
@@ -16,7 +17,7 @@ const ProfilePage = () => {
     const [showFollowers, setShowFollowers] = useState(false);
     
     const checkFollowStatus = async () => {
-        const response = await fetch(`http://localhost:3001/api/users/isFollowing/${id}`,{
+        const response = await fetch(`/api/users/isFollowing/${id}`,{
             method: 'GET',
              headers: { Authorization: `Bearer ${localStorage.getItem('token')}`
              }});
@@ -26,7 +27,7 @@ const ProfilePage = () => {
     };
 
     const fetchFollowers = async () => {
-        const response = await fetch(`http://localhost:3001/api/users/followers/${id}`, {
+        const response = await fetch(`/api/users/followers/${id}`, {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -39,7 +40,7 @@ const ProfilePage = () => {
     };
 
     const getUserPosts = async () => {
-        const response = await fetch(`http://localhost:3001/api/media/user/${id}`, {
+        const response = await fetch(`/api/media/user/${id}`, {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -80,7 +81,8 @@ const ProfilePage = () => {
         getUserData();
     }, [id]);
 
-    
+
+if (!user) return <div className='loading'><img src={logo}></img><p>Loading...</p></div>;    
     return (
         <div className='profile'>
             <div className='bio'>

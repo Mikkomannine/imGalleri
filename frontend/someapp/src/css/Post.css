@@ -22,7 +22,9 @@
     overflow: hidden;
     height: 1000px;
 }
-
+.post-details {
+    display: block;
+}
 .pages {
     display: flex;
     justify-content: center;

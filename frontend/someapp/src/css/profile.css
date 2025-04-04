@@ -1,52 +1,68 @@
+
 .profile {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around;
-    margin-top: 50px;
+    justify-content: center;
+    overflow: hidden;
 }
-.profilepic{
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    margin-bottom: 20px;
-}
-.bio {
+.profilepicture{
     display: flex;
-    flex-direction: row;
     align-items: center;
     justify-content: space-around;
-    margin-top: 50px;
-    background-color: #f9f9f9;
-    width: 1380px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 8px #ddd;
+    padding: 20px;
 }
 
-.wrapper {
+.bio {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 50px;
-    position: relative;
+    overflow: hidden;
+    margin: 50px;
+    background-color: #f9f9f9;
+    padding: 60px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px #ddd;
+}
+.header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    overflow: hidden;
+    margin: 50px;
 }
 
-.wrapper .followerlist {
+.bio-text {
+    display: flex;;
+    align-items: center;
+    justify-content: center;
+}
+
+.followerlist {
     display: flex;
     flex-direction: column;
-    z-index: 1;
-    position: absolute;
-    margin-top: 50px;
-    top: 80%;
-    list-style-type: none;
     background-color: #f9f9f9;
-    padding: 40px;
+    box-shadow: 0px 0px 8px #ddd;
+    padding: 10px;
     border-radius: 10px;
+    margin-left: 50px;
 }
-.wrapper .followerlist li {
+.followerlist ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow: auto;
+    height: 250px
+}
+.followerlist li {
     padding: 10px;
     border-bottom: 1px solid #ddd;
+    box-shadow: 0px 0px 8px #ddd;
+    border-radius: 10px;
 }
 
 .follow {
@@ -91,12 +107,222 @@
 }
 
 .dropdown {
-    height: 35px;
-    width: 35px;
+    display: flex;
     background-color: #f9f9f9;
-    border-radius: 25%;
-    border: 1px solid #ddd;
-    box-shadow: 0px 0px 8px #ddd;
-    margin: 10px;
+    border: none;
 }
 
+.dropdown :hover {
+    background-color: #ddd;
+    cursor: pointer;
+}
+.bio-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #72b0f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  
+  .bio-button:hover {
+    background-color: #0056b3;
+  }
+
+  .edit-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: lightgreen;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  .cancel-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: lightcoral;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+  }
+
+  
+  .file-input {
+    display: none;
+  }
+
+  .custom-file-upload {
+    display: inline-block;
+    padding: 7px 20px 10px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #72b0f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  
+  .custom-file-upload:hover {
+    background-color: #0056b3;
+  }
+
+  .posts {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  @media (max-width: 1000px) {
+    .profilepicture {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+        box-shadow: 0px 0px 0px #ddd;
+    }
+    .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .posts {
+        display: flex;
+        justify-content: center;
+        flex-wrap: column;
+      }
+    .post {
+        max-width: 400px;
+      }
+    .post img {
+        width: 400px;
+        height: 400px;
+      }
+    .followerlist {
+        margin-left: 0px;
+      }
+    }
+
+@media (max-width: 675px) {
+  .header {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 450px) {
+  .profilepicture img {
+    width: 150px;
+    height: 150px;
+  }
+  .bio {
+    width: 150px;
+  }
+.post {
+    width: 250px;
+  }
+.post img {
+    width: 275px;
+    height: 275px;
+  }
+.bio-text {
+  flex-direction: row;
+}
+  
+  .bio-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #72b0f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+  }
+  .bio-buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .bio-button:hover {
+    background-color: #0056b3;
+  }
+  .edit-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: lightgreen;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin: 5px;
+  }
+.update-wrapper {
+  margin: -50px;
+}
+}
+  
+/* Edit Profile Page */
+
+.cancel-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  background-color: lightcoral;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  margin: 5px;
+}
+
+.cancel-button:hover {
+  background-color: red;
+}
+
+.update-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 50px;
+  background-color: #f9f9f9;
+  padding: 60px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 8px #ddd;
+}
+
+.desc {
+  width: 200px;
+  resize: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: Arial, sans-serif;
+}
+
+.desc:focus {
+  outline: none;
+  border-color: #72b0f3;
+}
+
+
+.edit-button:hover {
+  background-color: rgb(0, 255, 0);
+}
+
+.update-wrapper form p {
+  margin: 10px 0;
+}

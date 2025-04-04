@@ -11,7 +11,7 @@ const Login = ({ setIsAuthenticated }) => {
   const username = useField("username");
   const password = useField("password");
 
-  const { login, error } = useLogin("http://localhost:3001/api/users/login");
+  const { login, error } = useLogin("/api/users/login");
 
   const handleLogin = async (e) => {
     e.preventDefault();

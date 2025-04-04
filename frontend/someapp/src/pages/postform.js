@@ -25,7 +25,7 @@ const PostForm = () => {
         formData.append('scale', scale); // Send scale value to the server
 
         try {
-          const response = await axios.post(`http://localhost:3001/api/media`, formData, {
+          const response = await axios.post(`/api/media`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -98,7 +98,7 @@ const PostForm = () => {
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
-                <button className='publish' type="submit">Publish</button>
+                <button className='edit-button' type="submit">Publish</button>
             </form>
         </div>
     );

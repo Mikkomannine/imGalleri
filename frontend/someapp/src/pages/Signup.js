@@ -13,7 +13,7 @@ const Signup = ({ setIsAuthenticated }) => {
   const firstName = useField("firstName");
   const lastName = useField("lastName");
 
-  const { signup, error } = useSignup("http://localhost:3001/api/users/signup");
+  const { signup, error } = useSignup("/api/users/signup");
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

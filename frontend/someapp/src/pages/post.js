@@ -23,7 +23,7 @@ const Post = () => {
         event.preventDefault();
 
         try {
-            const response = await axios.post(`http://localhost:3001/api/media/addComment/` + id, {
+            const response = await axios.post(`/api/media/addComment/` + id, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -40,7 +40,7 @@ const Post = () => {
 
 
     const checkLikedStatus = async () => {
-        const response = await fetch(`http://localhost:3001/api/media/isLiked/${id}`,{
+        const response = await fetch(`/api/media/isLiked/${id}`,{
             method: 'GET',
              headers: { Authorization: `Bearer ${localStorage.getItem('token')}`
              }});
@@ -51,7 +51,7 @@ const Post = () => {
 
   
       const fetchPost = async () => {
-        const response = await fetch(`http://localhost:3001/api/media/${id}`, {
+        const response = await fetch(`/api/media/${id}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -86,12 +86,18 @@ const Post = () => {
         <div className = "post">
         <h1>{post.title}</h1>
             <img src={post.imageUrl} alt={post.title} />
+            <div className='post-details'>
+                <div className='likebutton'>
         {isLiked ? (
                         <UnLikeButton userId={id} onLikeChange={handleLikeChange} />
                     ) : (
                         <LikeButton userId={id} onLikeChange={handleLikeChange} />
                     )}
-        <h3 className='likecount'>{likes.length}</h3>
+                    </div>
+        <div className='likecount'>
+        <h3>{likes.length}</h3>
+        </div>
+        </div>
         <p>{post.description}</p>
         <Link to={`/post/profile/${userId}`}>Profile</Link>
         </div>

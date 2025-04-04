@@ -39,7 +39,7 @@ const Layout = () => {
             <nav ref={navRef}>
                 <ul>
                 <li className="logoMain">
-                    <Link to="/">
+                    <Link to="/" onClick={toggleNav}>
                         <img className="web-project-logo" src={logo} alt="logo" />
                     </Link>
                 </li>
@@ -48,13 +48,13 @@ const Layout = () => {
                     <SearchResultsList results={results} />
                 </li>
                 <li className="link">
-                    <Link to="/">Home</Link>
+                    <Link to="/" onClick={toggleNav}>Home</Link>
                 </li>
                 <li className="link">
-                    <Link to="/categories">Categories</Link>
+                    <Link to="/categories" onClick={toggleNav}>Categories</Link>
                 </li>
                 <li className="link">
-                    <Link to="/myprofile">MyProfile</Link>
+                    <Link to="/myprofile" onClick={toggleNav}>MyProfile</Link>
                 </li>
                 <li>
                     <div className="text-wrapper-3"><button onClick={Logout}>Log Out</button></div>
