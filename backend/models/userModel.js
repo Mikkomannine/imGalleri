@@ -22,7 +22,7 @@ const userSchema = new Schema({
   },
   bio: {
     type: String,
-    required: true
+    required: false
   },
   firstName: { 
     type: String, 
@@ -44,6 +44,8 @@ const userSchema = new Schema({
     type: String,
     required: false
   },
+  resetToken: String,
+  resetTokenExpiry: Date,
   followers: [{type: ObjectId, ref: 'User'}],
   following: [{type: ObjectId, ref: 'User'}],
 

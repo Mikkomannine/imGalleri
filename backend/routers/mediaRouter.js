@@ -32,7 +32,7 @@ router.post('/unlike/:id', unlikePost);
 
 router.post('/addComment/:id', addComment);
 
-router.delete('/delete/:id/:commentId', deleteComment);
+router.delete('/delete/:mediaId/:commentId', deleteComment);
 
 // POST a new Media
 router.post('/', upload.single('image'), addMedia);

@@ -5,7 +5,8 @@ import UnfollowButton from '../components/unfollowButton'; // Adjust the import 
 import '../css/profile.css';
 import PostDetails from '../components/postDetails';
 import logo from './photo-gallery.png';
-
+import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from 'react-share';
+import image from './user.png';
 
 
 const ProfilePage = () => {
@@ -15,6 +16,7 @@ const ProfilePage = () => {
     const [posts, setPosts] = useState([]);
     const [user, setUser] = useState(null);
     const [showFollowers, setShowFollowers] = useState(false);
+    const shareUrl = window.location.href;
     
     const checkFollowStatus = async () => {
         const response = await fetch(`/api/users/isFollowing/${id}`,{
@@ -85,20 +87,46 @@ const ProfilePage = () => {
 if (!user) return <div className='loading'><img src={logo}></img><p>Loading...</p></div>;    
     return (
         <div className='profile'>
-            <div className='bio'>
-                <div className="picwrapper">
-                    <img className='profilepic' src={user?.imageUrl} alt='profile' />
+            <div className='header'>
+          <div className='profilepicture'>
+                    {user.imageUrl ? (
+                             <img src={user.imageUrl} alt="Uploaded" />
+                            ) : (
+                              <img src={image} alt="Default" />
+                            )}
                 </div>
-                <div className='wrapper'>
+                <div className='bio'>
                     <h2>{user?.username}</h2>
+                    <div className='bio-text'>
+                        <p>{user?.bio}</p>
+                     </div>
+                    <div className='follow-button'>
                     {isFollowing ? (
                         <UnfollowButton userId={id} onFollowChange={handleFollowChange} />
                     ) : (
                         <FollowButton userId={id} onFollowChange={handleFollowChange} />
                     )}
-                    <div className='follow-wrap'>
-                    <h2>Followers: {followers.length}</h2>
-                    <button className='dropdown' onClick={() => setShowFollowers(!showFollowers)}>v</button> {/* Button to toggle followers list */}
+                    </div>
+                          <div className="sharelinks">
+                                        <button>Share:</button>
+                                        <FacebookShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
+                                            <img src="/images/facebook.png" alt="Facebook" />  
+                                        </FacebookShareButton>
+                                        <TwitterShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
+                                            <img src="/images/twitter.png" alt="Twitter" />
+                                        </TwitterShareButton>
+                                        <LinkedinShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
+                                            <img src="/images/linkedin.png" alt="Linkedin" />
+                                        </LinkedinShareButton>
+                                    </div>
+                    </div>
+                    <div className='followerlist'>
+                        <h2>Followers {followers.length}</h2>
+                        <ul>
+                        {followers.map((follower) => (
+                            <li key={follower._id}>{follower.username}</li>
+                            ))}
+                        </ul>
                     </div>
                     {showFollowers && (
                         <>
@@ -110,7 +138,6 @@ if (!user) return <div className='loading'><img src={logo}></img><p>Loading...</
                             </ul>
                         </>
                     )}
-                </div>
             </div>
             <div className="posts">
                 {posts.length === 0 && <h2>No Posts Found</h2>}

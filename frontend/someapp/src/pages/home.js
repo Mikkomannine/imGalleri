@@ -39,7 +39,9 @@ if (!posts) return <div className='loading'><img src={logo}></img><p>Loading...<
                     <Link to={`/post/${post._id}`} className="post-link">
                     <h2>{post.title}</h2>
                     </Link>
+                    <Link to={`/post/${post._id}`} className="post-link">
                     <img src={post.imageUrl} alt={post.title} />
+                    </Link>
                     <p>{post.description}</p>
                 </div>
             ))}

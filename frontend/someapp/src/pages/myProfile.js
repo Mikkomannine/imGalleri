@@ -5,6 +5,8 @@ import PostDetails from '../components/postDetails';
 import '../css/profile.css';
 import image from './user.png';
 import logo from './photo-gallery.png';
+import { FacebookShareButton, TwitterShareButton,  LinkedinShareButton } from 'react-share';
+
 
 
 const MyProfile = () => {
@@ -13,6 +15,8 @@ const MyProfile = () => {
   const [postArray, setPostArray] = useState([])
   const [followers, setFollowers] = useState([]);
   const [update , setUpdate] = useState(false);
+  const shareUrl = window.location.href;
+  const title = document.title; 
 
   useEffect(() => {
     const fetchMyprofile = async () => {
@@ -107,7 +111,19 @@ return (
         <div className='bio-text'>
           <p>{user?.bio}</p>
           </div>
-        </div>
+      <div className="sharelinks">
+                    <button>Share:</button>
+                    <FacebookShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
+                        <img src="./images/facebook.png" alt="Facebook" />  
+                    </FacebookShareButton>
+                    <TwitterShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
+                        <img src="./images/twitter.png" alt="Twitter" />
+                    </TwitterShareButton>
+                    <LinkedinShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
+                        <img src="./images/linkedin.png" alt="Linkedin" />
+                    </LinkedinShareButton>
+                </div>
+            </div>
       </div>
       <div className='followerlist'>
           <h2>Followers {followers.length}</h2>
@@ -129,10 +145,3 @@ return (
 };
 
 export default MyProfile;
-
-
-/*
-      StrongPassword123!
-      */
-
-    

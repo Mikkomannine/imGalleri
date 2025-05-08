@@ -54,7 +54,7 @@ const Login = ({ setIsAuthenticated }) => {
           <div className="form-footer">
             <p>Don’t have an account?</p>
             <Link to="/signup">Sign up</Link>
-            <a href="/">Forgot your password?</a>
+            <a href="/forgot-password">Forgot your password?</a>
           </div>
         </form>
         {error && (

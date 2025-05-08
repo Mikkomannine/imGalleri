@@ -2,7 +2,7 @@ const express = require('express')
 const requireAuth = require('../middleware/requireAuth')
 
 // controller functions
-const { loginUser, signupUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser } = require('../controllers/userController')
+const { loginUser, signupUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword } = require('../controllers/userController')
 const currentTokenAuth = require('../middleware/currentTokenAuth')
 
 
@@ -36,5 +36,8 @@ router.get('/myprofile', getMe)
 
 router.get('/isFollowing/:id', requireAuth, checkFollowStatus)
 
+router.post("/forgot-password", forgotPassword)
+
+router.post("/reset-password/:token", resetPassword)
 
 module.exports = router

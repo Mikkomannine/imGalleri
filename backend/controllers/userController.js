@@ -2,6 +2,10 @@ const User = require('../models/userModel')
 const jwt = require('jsonwebtoken')
 const s3Upload = require('../config/s3Upload')
 const generateSignedUrl = require('../config/generateSignedUrl')
+const bcrypt = require('bcrypt')
+const crypto = require('crypto')
+const sendResetEmail = require('../config/sendResetEmail')
+const validator = require('validator')
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '3d' })
@@ -196,5 +200,54 @@ const updateUser = async (req, res) => {
     }
 }
 
+// POST /api/auth/forgot-password
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).send("User not found");
+  
+    const token = crypto.randomBytes(32).toString("hex");
+    user.resetToken = token;
+    user.resetTokenExpiry = Date.now() + 1000 * 60 * 60; // 1 hour
+    await user.save();
+  
+    const resetLink = `http://localhost:3000/reset-password/${token}`;
+    
+    // Use nodemailer/sendgrid to send email
+    await sendResetEmail(user.email, resetLink);
+  
+    res.send("Password reset link sent");
+  }  
 
-module.exports = { signupUser, loginUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser}
+  // POST /api/auth/reset-password/:token
+  const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+  
+    const user = await User.findOne({
+      resetToken: token,
+      resetTokenExpiry: { $gt: Date.now() },
+    });
+  
+    if (!user) {
+      console.log("No user found or token expired.");
+      return res.status(400).send("Invalid or expired token");
+    }
+  
+    if (!validator.isStrongPassword(newPassword)) {
+      console.log("Weak password:", newPassword);
+      return res.status(400).send("Password not strong enough");
+    }
+  
+    const hashed = await bcrypt.hash(newPassword, 10);
+    user.password = hashed;
+    user.resetToken = undefined;
+    user.resetTokenExpiry = undefined;
+    await user.save();
+  
+    res.send({ message: "Password reset successful" });
+  };
+  
+  
+
+module.exports = { signupUser, loginUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword }

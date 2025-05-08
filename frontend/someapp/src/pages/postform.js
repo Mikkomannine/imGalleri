@@ -92,13 +92,17 @@ const PostForm = () => {
                     value={scale}
                     onChange={handleScaleChange}
                 />
+                <div className='scale-label'>Scale: {scale}</div> {/* Display the scale value */}
                 <textarea
                     className='desc'
                     placeholder="Description..."
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                 />
+                <div className='buttons'>
                 <button className='edit-button' type="submit">Publish</button>
+                <button className='cancel-button' type="button" onClick={() => navigate('/myprofile')}>Cancel</button>
+                </div>
             </form>
         </div>
     );

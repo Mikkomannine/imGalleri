@@ -4,6 +4,7 @@ const s3Upload = require('../config/s3Upload');
 const generateSignedUrl = require('../config/generateSignedUrl');
 const User = require('../models/userModel');
 
+
 const getAllMedia = async (req, res) => {
   try {
     let media = await Media.find().sort({createdAt: -1})
@@ -170,22 +171,40 @@ const getComments = async (req, res) => {
 
 // Delete comment controller
 const deleteComment = async (req, res) => {
-  const mediaId = req.params.id;
-  const commentId = req.params.commentId
+  const { mediaId, commentId } = req.params;
+  const userId = req.user._id; // assuming authentication middleware adds this
 
   try {
-      const media = await Media.findById(mediaId);
+    const media = await Media.findById(mediaId);
+    if (!media) {
+      return res.status(404).json({ message: 'Media not found' });
+    }
 
-      if (!media) {
-          return res.status(404).send({ message: 'Media not found' });
-      }
-      media.comments = media.comments.filter(comment => comment._id.toString() !== commentId);
+    // Use findIndex to locate the comment reliably
+    const commentIndex = media.comments.findIndex(
+      (c) => c._id.toString() === commentId
+    );
 
-      await media.save();
+    if (commentIndex === -1) {
+      return res.status(404).json({ message: 'Comment not found' });
+    }
 
-      res.status(200).send({ message: 'Comment deleted successfully' });
+    const comment = media.comments[commentIndex];
+
+    if (comment.postedBy.toString() !== userId.toString()) {
+      return res.status(403).json({ message: 'Not authorized to delete this comment' });
+    }
+    console.log("commentIndex", commentIndex);
+    console.log("comment", comment);
+
+    // Remove comment using splice
+    media.comments.splice(commentIndex, 1);
+    await media.save();
+
+    res.status(200).json({ message: 'Comment deleted successfully', media });
   } catch (error) {
-      res.status(500).send({ message: 'Failed to delete comment', error: error.message });
+    console.error('Delete comment error:', error);
+    res.status(500).json({ message: 'Error deleting comment', error });
   }
 };
 

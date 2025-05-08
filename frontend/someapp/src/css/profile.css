@@ -40,6 +40,10 @@
     display: flex;;
     align-items: center;
     justify-content: center;
+
+}
+.bio-text p {
+
 }
 
 .followerlist {
@@ -95,27 +99,18 @@
 
 .follow:hover {
     background-color: rgb(99, 167, 223);
+    cursor: pointer;
 }
 
 .unfollow:hover {
     background-color: rgb(111, 226, 111);
-}
-
-.follow-wrap {
-    display: flex;
-    align-items: center;
-}
-
-.dropdown {
-    display: flex;
-    background-color: #f9f9f9;
-    border: none;
-}
-
-.dropdown :hover {
-    background-color: #ddd;
     cursor: pointer;
 }
+.follow-button {
+    margin: 20px;
+  }
+
+
 .bio-button {
     display: inline-block;
     padding: 10px 20px;
@@ -125,7 +120,7 @@
     color: white;
     border: none;
     border-radius: 4px;
-    margin: 5px;
+    margin: 15px;
   }
   
   .bio-button:hover {
@@ -188,7 +183,6 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        background-color: white;
         box-shadow: 0px 0px 0px #ddd;
     }
     .profile {
@@ -311,6 +305,7 @@
   border: 1px solid #ccc;
   border-radius: 4px;
   font-family: Arial, sans-serif;
+  margin: 10px;
 }
 
 .desc:focus {
@@ -325,4 +320,72 @@
 
 .update-wrapper form p {
   margin: 10px 0;
+}
+
+
+/*Share*/
+
+.sharelinks {
+  margin-top: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0px 0px 8px #ddd;
+  background-color: white;
+  border-radius: 25px;
+  display: flex;
+  justify-content: center;
+}
+
+.sharelinks button {
+  margin: 15px;
+  border: none;
+  background-color: white;
+  font-size: 17px;;
+}
+
+.react-share__ShareButton:hover {
+  cursor: pointer;
+}
+.react-share__ShareButton img {
+  width: 30px;
+  height: 30px;
+  border: none;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-frame {
+  width: 600px;
+  height: 600px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensures the image does not overflow the frame */
+}
+
+.image-frame img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Ensures the image maintains aspect ratio */
+}
+@keyframes easeInOut {
+  0%, 100% {
+    opacity: 0;
+    transform: scale(0.8);  /* Original size */
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1); /* Scale the image to 120% */
+  }
+}
+
+.loading img {
+  width: 100px;
+  height: 100px;
+  margin-top: 200px;
+  animation: easeInOut 2s infinite; /* Apply the animation */
 }

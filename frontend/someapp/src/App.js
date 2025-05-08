@@ -15,6 +15,8 @@ import Post from './pages/post';
 import EditProfilePage from './pages/EditProfilePage';
 import Layout from './components/layout';
 import { useLocation } from 'react-router-dom';
+import ForgotPassword from './pages/forgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 
 function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
@@ -31,6 +33,9 @@ function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
     { path: "/edit/profile/:id", element: <EditProfilePage /> },
     { path: "/login", element: <Login setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
     { path: "/signup", element: <Signup setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
+    { path: "/forgot-password", element: <ForgotPassword />, isAuthenticated: false },
+    { path: "/reset-password/:token", element: <ResetPassword />, isAuthenticated: false }
+
   ];
 
   return (
