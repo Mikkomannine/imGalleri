@@ -87,13 +87,16 @@ const getMedia = async (req, res) => {
 
 // Delete Media by ID
 const deleteMedia = async (req, res) => {
-  const { id } = req.params;
+  const {mediaId} = req.params;
   try {
     const user_id = req.user._id;
-    const media = await Media.findByIdAndDelete({ _id: id, user_id: user_id });
+    console.log("mediaId: ", mediaId);
+    console.log("user_id: ", user_id);
+    const media = await Media.findOneAndDelete({ _id: mediaId, user_id: user_id });
     if (!media) {
       return res.status(404).json({ message: 'Media not found' });
     }
+    // Optionally, delete the image from S3
     res.status(200).json({ message: 'Media deleted successfully' });
   } catch (error) {
     console.error(error);
@@ -121,6 +124,44 @@ const updateMedia = async (req, res) => {
   }
 }
 
+const getMediaByFollowing = async (req, res) => {
+  try {
+    console.log("getMediaByFollowing called");
+    const userId = req.user._id;
+
+    // Fetch the current user's following list
+    const user = await User.findById(userId).select('following');
+    if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+    }
+    const followingList = user.following;
+
+    if (!followingList.length) {
+        return res.status(404).json({ error: 'No followed users' });
+    }
+
+    // Fetch media posted by followed users
+    const media = await Media.find({ user_id: { $in: followingList } }).sort({ createdAt: -1 });
+
+    for (let i = 0; i < media.length; i++) {
+        if (media[i].imageKey) {
+            const imageUrl = await generateSignedUrl(media[i].imageKey);
+            media[i] = media[i].toObject();
+            media[i].imageUrl = imageUrl;
+        }
+    }
+
+    if (!media.length) {
+        return res.status(404).json({ error: 'No media found from followed users' });
+    }
+
+    res.status(200).json(media);
+} catch (error) {
+    console.error('Error fetching media from followed users:', error);
+    res.status(500).json({ error: 'Server Error' });
+}
+}
+
 const deleteAllMedia = async (req, res) => {
   try {
     await Media.deleteMany();
@@ -141,6 +182,8 @@ const addComment = async (req, res) => {
 
   try {
       const media = await Media.findById(mediaId);
+      console.log("mediaId: ", mediaId);
+      console.log("userId: ", userId);
       if (!media) {
           return res.status(404).json({ message: 'Media not found' });
       }
@@ -305,5 +348,6 @@ module.exports = {
   deleteComment,
   likePost,
   unlikePost,
-  checkLikeStatus
+  checkLikeStatus,
+  getMediaByFollowing,
 };

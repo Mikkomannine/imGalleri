@@ -82,7 +82,7 @@ const PostForm = () => {
                 </div>
         
                 <div className="example-frame"> {/* Add this div with the class example-frame */}
-                    <img ref={imagePreviewRef} alt="Preview" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+                    <img ref={imagePreviewRef} alt="Preview" style={{ maxWidth: '100%', maxHeight: '400px' }} />
                 </div>
                 <input
                     type="range"

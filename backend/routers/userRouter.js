@@ -2,8 +2,7 @@ const express = require('express')
 const requireAuth = require('../middleware/requireAuth')
 
 // controller functions
-const { loginUser, signupUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword } = require('../controllers/userController')
-const currentTokenAuth = require('../middleware/currentTokenAuth')
+const { loginUser, signupUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword, getFollowing } = require('../controllers/userController')
 
 
 const multer = require('multer');
@@ -20,24 +19,30 @@ router.post('/login', loginUser)
 // signup route
 router.post('/signup', signupUser)
 
-router.get('/user/:id', requireAuth, getUser)
-
-router.post("/follow/:id", requireAuth, followUser)
-
-router.post("/unfollow/:id", requireAuth, unFollowUser)
-
-router.get("/followers/:id", requireAuth, getFollowers)
-
-router.patch('/upload/:id', upload.single('image'), requireAuth, currentTokenAuth, imageUpload)
-
-router.patch('/:id/edit', requireAuth, updateUser)
-
 router.get('/myprofile', getMe)
-
-router.get('/isFollowing/:id', requireAuth, checkFollowStatus)
 
 router.post("/forgot-password", forgotPassword)
 
 router.post("/reset-password/:token", resetPassword)
+
+// require auth
+router.use(requireAuth);
+
+router.get('/user/:id', getUser)
+
+router.post("/follow/:id", followUser)
+
+router.post("/unfollow/:id", unFollowUser)
+
+router.get("/followers/:id", getFollowers)
+
+router.get('/following/:id', getFollowing)
+
+router.patch('/upload', upload.single('image'), imageUpload)
+
+router.patch('/:id/edit', updateUser)
+
+router.get('/isFollowing/:id', checkFollowStatus)
+
 
 module.exports = router

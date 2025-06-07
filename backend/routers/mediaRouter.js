@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { getAllMedia, addMedia, getMedia, deleteMedia, updateMedia, getUsersMedia, deleteAllMedia, addComment, getComments, deleteComment, likePost, unlikePost, checkLikeStatus } = require('../controllers/mediaController');
+const { getAllMedia, addMedia, getMedia, deleteMedia, updateMedia, getUsersMedia, deleteAllMedia, addComment, getComments, deleteComment, likePost, unlikePost, checkLikeStatus, getMediaByFollowing } = require('../controllers/mediaController');
 const requireAuth = require('../middleware/requireAuth')
-
 const multer = require('multer');
 
 // Set up multer with memory storage
@@ -38,16 +37,14 @@ router.delete('/delete/:mediaId/:commentId', deleteComment);
 router.post('/', upload.single('image'), addMedia);
 
 // DELETE a Media
-router.delete('/:id', deleteMedia);
+router.delete('/delete/:mediaId', deleteMedia);
 
 // Update Media using PUT
 router.patch('/:id', updateMedia);
 
 router.get('/isLiked/:id', checkLikeStatus);
 
+router.get('/following/medias', getMediaByFollowing);
 
-
-
-//router.patch('/upload/:id', upload.single('image'), imageUpload)
 
 module.exports = router;

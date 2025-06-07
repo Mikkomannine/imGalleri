@@ -74,6 +74,18 @@ const getFollowers = async (req, res) => {
     }
 };
 
+const getFollowing = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).populate('following', 'username');
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json(user.following);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
 // Follow a user
 const followUser = async (req, res) => {
     try {
@@ -127,7 +139,7 @@ const imageUpload = async (req, res) => {
         const uploadResult = await s3Upload(req.file);
         const fileKey = uploadResult.Key;
 
-        const user = await User.findByIdAndUpdate(req.params.id, { imageKey: fileKey }, { new: true });
+        const user = await User.findByIdAndUpdate(req.user._id, { imageKey: fileKey }, { new: true });
 
         if (!user) {
             console.error('User not found or update failed');
@@ -250,4 +262,4 @@ const forgotPassword = async (req, res) => {
   
   
 
-module.exports = { signupUser, loginUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword }
+module.exports = { signupUser, loginUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword, getFollowing }

@@ -1,5 +1,4 @@
 import React from 'react';
-import './css/App.css';
 import MyProfile from './pages/myProfile'; // Import the myprofile
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
@@ -17,6 +16,7 @@ import Layout from './components/layout';
 import { useLocation } from 'react-router-dom';
 import ForgotPassword from './pages/forgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import Following from './pages/Following';
 
 
 function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
@@ -29,12 +29,13 @@ function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
     { path: "/postform", element: <PostForm /> },
     { path: "/post/:id", element: <Post /> },
     { path: "/:id/update", element: <UpdatePost /> },
-    { path: "post/profile/:id", element: <ProfilePage /> },
+    { path: "/profile/:id", element: <ProfilePage /> },
     { path: "/edit/profile/:id", element: <EditProfilePage /> },
     { path: "/login", element: <Login setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
     { path: "/signup", element: <Signup setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
     { path: "/forgot-password", element: <ForgotPassword />, isAuthenticated: false },
-    { path: "/reset-password/:token", element: <ResetPassword />, isAuthenticated: false }
+    { path: "/reset-password/:token", element: <ResetPassword />, isAuthenticated: false },
+    { path: "/following", element: <Following/> },
 
   ];
 

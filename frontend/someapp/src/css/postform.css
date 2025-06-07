@@ -1,7 +1,7 @@
 /* Example frame styling */
 .example-frame {
-    width: 600px;
-    height: 600px;
+    width: 400px;
+    height: 400px;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -51,7 +51,7 @@ const Layout = () => {
                     <Link to="/" onClick={toggleNav}>Home</Link>
                 </li>
                 <li className="link">
-                    <Link to="/categories" onClick={toggleNav}>Categories</Link>
+                    <Link to="/following" onClick={toggleNav}>Following</Link>
                 </li>
                 <li className="link">
                     <Link to="/myprofile" onClick={toggleNav}>MyProfile</Link>

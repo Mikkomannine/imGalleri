@@ -47,6 +47,15 @@ const UpdateProfile = () => {
     
     const handleUpdate = async (e) => {
         e.preventDefault();
+        const characterLimit = 200;
+        if (bio.length > characterLimit) {
+            alert(`Bio exceeds ${characterLimit} characters!`);
+            return;
+        }
+        if (firstName.length > 20 || lastName.length > 20 || phoneNumber.length > 20 || email.length > 20) {
+            alert(`Input exceeds 20 characters!`);
+            return;
+        }
         const profile = { firstName, lastName, phoneNumber, email, bio };
         const response = await fetch(`/api/users/${id}/edit`, {
             method: "PATCH",
@@ -86,7 +95,7 @@ const UpdateProfile = () => {
         formData.append('image', file);
     
         try {
-          const response = await axios.patch(`/api/users/upload/` + user._id, formData, {
+          const response = await axios.patch(`/api/users/upload`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${localStorage.getItem('token')}`,

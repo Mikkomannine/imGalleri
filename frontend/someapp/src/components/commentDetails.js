@@ -46,7 +46,7 @@ const CommentDetails = ({ comment, currentUserId, mediaId, onDelete }) => {
             })}
             <div className='comment-user'>
             {user && (
-                <Link to={`/post/profile/${comment.postedBy}`}>
+                <Link to={`/profile/${comment.postedBy}`}>
                     {user.username}
                 </Link>
             )}

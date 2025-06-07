@@ -9,8 +9,17 @@
 .profilepicture{
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    flex-direction: column;
     padding: 20px;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
 }
 
 .bio {
@@ -22,9 +31,10 @@
     overflow: hidden;
     margin: 50px;
     background-color: #f9f9f9;
-    padding: 60px;
+    padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 8px #ddd;
+    max-width: 500px;
 }
 .header {
     display: flex;
@@ -40,33 +50,56 @@
     display: flex;;
     align-items: center;
     justify-content: center;
-
+    border: black;
+    border-radius: 10px;
+    background-color: #f9f9f9;
 }
 .bio-text p {
-
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    color: black;
+    margin: 10px;
 }
 
+.followerFollowing {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 .followerlist {
     display: flex;
     flex-direction: column;
     background-color: #f9f9f9;
     box-shadow: 0px 0px 8px #ddd;
+    max-height: 300px;
+    margin: 15px;
     padding: 10px;
     border-radius: 10px;
-    margin-left: 50px;
 }
 .followerlist ul {
     padding: 0;
     margin: 0;
     list-style-type: none;
     overflow: auto;
-    height: 250px
+    height: 250px;
 }
 .followerlist li {
     padding: 10px;
     border-bottom: 1px solid #ddd;
     box-shadow: 0px 0px 8px #ddd;
-    border-radius: 10px;
+    margin: 5px;
+}
+
+.followerlist ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+}
+.followerlist ul li a:hover {
+    text-decoration: underline;
+    background-color:#f1f1f1;
 }
 
 .follow {
@@ -174,7 +207,8 @@
   .posts {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
+    align-items: center;
+    flex-direction: column;
   }
   
   @media (max-width: 1000px) {
@@ -191,20 +225,12 @@
         align-items: center;
         justify-content: center;
     }
-    .posts {
+
+    .bio-buttons {
         display: flex;
+        flex-direction: column;
         justify-content: center;
-        flex-wrap: column;
-      }
-    .post {
-        max-width: 400px;
-      }
-    .post img {
-        width: 400px;
-        height: 400px;
-      }
-    .followerlist {
-        margin-left: 0px;
+        align-items: center;
       }
     }
 
@@ -216,21 +242,18 @@
 
 @media (max-width: 450px) {
   .profilepicture img {
-    width: 150px;
-    height: 150px;
+    width: 175px;
+    height: 175px;
   }
   .bio {
-    width: 150px;
-  }
-.post {
-    width: 250px;
-  }
-.post img {
-    width: 275px;
-    height: 275px;
+    width: 175px;
   }
 .bio-text {
   flex-direction: row;
+}
+.followerlist {
+  margin: 5px;
+  max-width: 110px;
 }
   
   .bio-button {
@@ -322,17 +345,26 @@
   margin: 10px 0;
 }
 
+.profilepicture img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 2px solid black;
+}
+
 
 /*Share*/
 
 .sharelinks {
-  margin-top: 20px;
-  margin-bottom: 30px;
+  margin-top: 10px;
+  margin-bottom: 0px;
   box-shadow: 0px 0px 8px #ddd;
   background-color: white;
   border-radius: 25px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  max-width: 100%;
 }
 
 .sharelinks button {
