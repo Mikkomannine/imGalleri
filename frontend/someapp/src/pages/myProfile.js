@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import PostDetails from '../components/postDetails';
 import '../css/profile.css';
@@ -136,6 +135,14 @@ const MyProfile = () => {
   };
 
   const handleDeletePost = async (mediaId) => {
+    // pop up confirmation before deletion
+    if (!window.confirm('Are you sure you want to delete this post?')) {
+      return;
+    }
+    if (!mediaId) {
+      console.error('No media ID provided for deletion');
+      return;
+    }
     try {
       console.log('Deleting post with ID:', mediaId);
       const response = await fetch(`/api/media/delete/${mediaId}`, {
@@ -213,11 +220,9 @@ const MyProfile = () => {
               handleLikeChange={() => handleLikeChange(post._id)}
             />
             <button
-              className="delete-post-btn"
-              onClick={() => handleDeletePost(post._id)}
-              style={{ marginTop: '10px', background: '#e74c3c', color: '#fff', border: 'none', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}
-            >
-              Delete Post
+              className="delete-button"
+              onClick={() => handleDeletePost(post._id)}>
+              <img src="/images/bin.png" alt="Delete" className="delete-icon" />
             </button>
           </div>
         ))}
