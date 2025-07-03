@@ -10,15 +10,17 @@
     text-align: center;
 }
 .home {
-    overflow: hidden;
     height: 600px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
-.homeposts {
+.home-posts {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 750px;
+    height: 600px;
     overflow: auto;
 }
 .post-link {
@@ -30,15 +32,20 @@
     color: black;
     transform: scale(1.02);
 }
-.home img {
-    width: 400px;
-    height: 400px;
-    margin-bottom: 20px;
-}
 
-@media (max-width: 445px) {
-    .home img {
-        width: 200px;
-        height: 200px;
+@media (max-width: 400px) {
+    .home {
+        flex-direction: column;
+        height: auto;
+        align-items: center;
+        overflow-x: none;
+    }
+    .home-posts {
+        width: 100%;
+        height: auto;
+        overflow-x: none;
+    }
+    .post-link {
+        font-size: 1.2em;
     }
 }

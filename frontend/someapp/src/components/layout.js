@@ -1,19 +1,16 @@
-import { useNavigate } from "react-router-dom";
 import { Outlet, Link } from "react-router-dom";
 import '../css/layoyt.css';
 import { SearchBar } from "./SearchBar";
 import { useState } from "react";
 import { SearchResultsList } from "./searchResultList";
-import logo from '../pages/photo-gallery.png';
 import { useEffect, useRef } from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
+import LogoutButton from "./LogoutButton";
 
 const Layout = () => {
     const [results, setResults] = useState([]);
     const [isNavOpen, setIsNavOpen] = useState(false);
     const navRef = useRef();
-
-    const navigate = useNavigate();
 
     const toggleNav = () => {
         setIsNavOpen(!isNavOpen);
@@ -27,20 +24,13 @@ const Layout = () => {
         }
     }, [isNavOpen]);
 
-    const Logout = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-       // setIsAuthenticated(false);
-        navigate('/login');
-    };
-
     return (
         <div className="nav-bar">
             <nav ref={navRef}>
                 <ul>
                 <li className="logoMain">
                     <Link to="/" onClick={toggleNav}>
-                        <img className="web-project-logo" src={logo} alt="logo" />
+                        <img className="web-project-logo" src="/images/photo-gallery.png" alt="logo" />
                     </Link>
                 </li>
                 <li>
@@ -54,10 +44,10 @@ const Layout = () => {
                     <Link to="/following" onClick={toggleNav}>Following</Link>
                 </li>
                 <li className="link">
-                    <Link to="/myprofile" onClick={toggleNav}>MyProfile</Link>
+                    <Link to="/myprofile" onClick={toggleNav}>My Profile</Link>
                 </li>
                 <li>
-                    <div className="text-wrapper-3"><button onClick={Logout}>Log Out</button></div>
+                    <LogoutButton />
                 </li>
                 <button className="nav-btn nav-close-btn"
 					onClick={toggleNav}>

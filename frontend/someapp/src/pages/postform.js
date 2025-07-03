@@ -2,8 +2,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
 import '../css/postform.css';
-import image from './add-image.png'; // Import the image
-
 import { useRef } from 'react';
 
 const PostForm = () => {
@@ -11,18 +9,28 @@ const PostForm = () => {
     const [imageUrl, setImageUrl] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [scale, setScale] = useState(1); // Added for scaling
+    const [scale, setScale] = useState(1);
     const navigate = useNavigate();
-    const imagePreviewRef = useRef(null); // Reference for the image preview
+    const imagePreviewRef = useRef(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const char_limit = 50;
+        if (title.length > char_limit) {
+            alert(`Title exceeds ${char_limit} characters!`);
+            return;
+        }
+        const desc_char_limit = 500;
+        if (description.length > desc_char_limit) {
+            alert(`Description exceeds ${desc_char_limit} characters!`);
+            return;
+        }
 
         const formData = new FormData();
         formData.append('image', file);
         formData.append('title', title);
         formData.append('description', description);
-        formData.append('scale', scale); // Send scale value to the server
+        formData.append('scale', scale);
 
         try {
           const response = await axios.post(`/api/media`, formData, {
@@ -30,7 +38,13 @@ const PostForm = () => {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
+            validateStatus: () => true
           });
+          if (response.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+            return;
+          }
           if (response) {
             console.log(response.data);
             setTitle('');
@@ -77,11 +91,11 @@ const PostForm = () => {
                 />
                 <input id="customFileInput" type="file" onChange={handleFileChange} style={{ display: 'none' }} />
                 <div className='choosefile'>
-                    <button type="button" onClick={triggerFileInputClick}><img src={image} alt="Upload" /></button>
+                    <button type="button" onClick={triggerFileInputClick}><img src="images/add-image.png" alt="Upload" /></button>
                     <div>Choose Image</div>
                 </div>
         
-                <div className="example-frame"> {/* Add this div with the class example-frame */}
+                <div className="example-frame">
                     <img ref={imagePreviewRef} alt="Preview" style={{ maxWidth: '100%', maxHeight: '400px' }} />
                 </div>
                 <input
@@ -92,7 +106,7 @@ const PostForm = () => {
                     value={scale}
                     onChange={handleScaleChange}
                 />
-                <div className='scale-label'>Scale: {scale}</div> {/* Display the scale value */}
+                <div className='scale-label'>Scale: {scale}</div>
                 <textarea
                     className='desc'
                     placeholder="Description..."

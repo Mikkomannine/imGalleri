@@ -1,4 +1,3 @@
-
 .profile {
     display: flex;
     flex-direction: column;
@@ -36,6 +35,14 @@
     box-shadow: 0px 0px 8px #ddd;
     max-width: 300px;
 }
+
+  .bio-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
 .header {
     display: flex;
     flex-direction: row;
@@ -113,6 +120,8 @@
     border: rgb(47, 122, 214);
     padding: 15px;
     width: 100px;
+    height: 35px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color: rgb(47, 122, 214);
 }
 
@@ -127,7 +136,46 @@
     border: rgb(47, 122, 214);
     padding: 15px;
     width: 100px;
+    height: 35px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color: rgb(53, 214, 47);
+}
+
+.fade-follow-container {
+  position: relative;
+  min-height: 35px;
+  min-width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fade-follow {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.fade-in {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  z-index: 2;
+}
+.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+  z-index: 1;
+}
+.button-fade {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.95);
+  transition: opacity 0.3s, transform 0.3s;
 }
 
 .follow:hover {
@@ -153,7 +201,6 @@
     color: white;
     border: none;
     border-radius: 4px;
-    margin: 15px;
   }
   
   .bio-button:hover {
@@ -208,7 +255,39 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
   }
+    .btn {
+    border: none;
+    background-color: white;
+  }
+  .btn img {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+  }
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000;
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-radius: 8px;
+  min-width: 300px;
+  padding: 10px;
+}
   
   @media (max-width: 1000px) {
     .profilepicture {
@@ -225,15 +304,13 @@
         justify-content: center;
     }
 
-    .bio-buttons {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
+    .bio {
+        width: 300px;
+        margin: 20px;
+    }
     }
 
-@media (max-width: 675px) {
+@media (max-width: 700px) {
   .header {
     flex-direction: column;
   }
@@ -241,8 +318,8 @@
 
 @media (max-width: 450px) {
   .profilepicture img {
-    width: 175px;
-    height: 175px;
+    max-width: 175px;
+    max-height: 175px;
   }
   .bio {
     width: 175px;
@@ -255,40 +332,16 @@
   max-width: 110px;
 }
   
-  .bio-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #72b0f3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    margin: 5px;
-  }
   .bio-buttons {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
   }
-  
-  .bio-button:hover {
-    background-color: #0056b3;
-  }
-  .edit-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: lightgreen;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    margin: 5px;
-  }
-.update-wrapper {
-  margin: -50px;
+
+
 }
-}
+
   
 /* Edit Profile Page */
 
@@ -314,15 +367,13 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin: 50px;
   background-color: #f9f9f9;
-  padding: 60px;
   border-radius: 10px;
   box-shadow: 0px 0px 8px #ddd;
 }
 
 .desc {
-  width: 200px;
+  width: 90%;
   resize: none;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -346,9 +397,24 @@
 
 .profilepicture img {
   width: 200px;
-  height: 200px;
+  max-height: 200px;
   border-radius: 50%;
   border: 2px solid black;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.update-profile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px;
 }
 
 

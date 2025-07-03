@@ -2,39 +2,55 @@ import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import "../css/searchbar.css";
 
-export const SearchBar = ({setResults}) => {
-    const [input, setInput] = useState("");
+export const SearchBar = ({ setResults }) => {
+  const [input, setInput] = useState("");
 
-    const fetchData = (value) => {
-        fetch("http://localhost:3001/api/media/")
-            .then((response) => response.json())
-            .then((json) => {
-                const results = json.filter((post) => {
-                    return (
-                        value &&
-                        post &&
-                        post.title &&
-                        post.title.toLowerCase().includes(value)
-                    );
-                });
-                setResults(results);
-                console.log(results);
-            });
-    };
+  const fetchData = (value) => {
+    fetch("/api/media/", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => {
+        if (response.status === 401) {
+          localStorage.removeItem("token");
+          window.location.href = "/login";
+          return Promise.reject("Unauthorized");
+        }
+        return response.json();
+      })
+      .then((json) => {
+        if (!json) return;
+        const results = json.filter((post) => {
+          return (
+            value &&
+            post &&
+            post.title &&
+            post.title.toLowerCase().includes(value)
+          );
+        });
+        setResults(results);
+      })
+      .catch((err) => {
+        if (err !== "Unauthorized") {
+          console.error("Search error:", err);
+        }
+      });
+  };
 
-    const handleChange = (value) => {
-        setInput(value);
-        fetchData(value);
-    };
+  const handleChange = (value) => {
+    setInput(value);
+    fetchData(value);
+  };
 
-    return (
-        <div className="input-wrapper">
-            <FaSearch id="search-icon" />
-            <input
-                placeholder="Type to search..."
-                value={input}
-                onChange={(e) => handleChange(e.target.value)}
-            />
-        </div>
-    );
+  return (
+    <div className="input-wrapper">
+      <FaSearch id="search-icon" />
+      <input
+        placeholder="Type to search..."
+        value={input}
+        onChange={(e) => handleChange(e.target.value)}
+      />
+    </div>
+  );
 };

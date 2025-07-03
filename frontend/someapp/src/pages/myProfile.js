@@ -2,11 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PostDetails from '../components/postDetails';
 import '../css/profile.css';
-import image from './user.png';
-import logo from './photo-gallery.png';
-import { FacebookShareButton, TwitterShareButton, LinkedinShareButton } from 'react-share';
+import ShareLinks from '../components/ShareLinks';
 import FollowersList from '../components/followerList';
 import FollowingList from '../components/FollowingList';
+
 
 const MyProfile = () => {
   const [imageUrl, setImageUrl] = useState(null);
@@ -15,9 +14,12 @@ const MyProfile = () => {
   const [followers, setFollowers] = useState([]);
   const [following, setFollowing] = useState([]);
   const [update, setUpdate] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editPost, setEditPost] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDescription, setEditDescription] = useState('');
   const shareUrl = window.location.href;
 
-  // Fetch user profile data
   useEffect(() => {
     const fetchMyProfile = async () => {
       const token = localStorage.getItem('token');
@@ -28,7 +30,12 @@ const MyProfile = () => {
         },
       };
       try {
-        const res = await fetch(`http://localhost:3001/api/users/myprofile`, config);
+        const res = await fetch(`/api/users/myprofile`, config);
+        if (res.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+          return;
+        }
         if (!res.ok) {
           throw new Error('Failed to fetch profile');
         }
@@ -53,13 +60,17 @@ const MyProfile = () => {
       const response = await fetch("/api/users/followers/" + user._id, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
       const data = await response.json();
       if (!response.ok) {
         console.log("error fetching followers");
         setFollowers([]);
         return;
       }
-      console.log("followers was first", data);
       setFollowers(data);
     };
     getFollowers();
@@ -73,26 +84,33 @@ const MyProfile = () => {
       const response = await fetch("/api/users/following/" + user._id, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
       const data = await response.json();
       if (!response.ok) {
         console.log("error fetching following");
         setFollowing([]);
         return;
       }
-      console.log("following was first", data);
       setFollowing(data);
     };
     getFollowing();
   }, [user]);
 
-
-  // Fetch posts for the user
   useEffect(() => {
     if (user && user._id) {
       const getPosts = async () => {
         const response = await fetch(`/api/media/user/${user._id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+          return;
+        }
         const data = await response.json();
         if (!response.ok) {
           console.error('Error fetching posts');
@@ -105,9 +123,6 @@ const MyProfile = () => {
     }
   }, [user]);
 
-
-
-  // Handle like/unlike functionality
   const handleLikeChange = async (postId) => {
     try {
       const response = await fetch(`/api/media/like/${postId}`, {
@@ -121,7 +136,6 @@ const MyProfile = () => {
         throw new Error('Failed to like/unlike the post');
       }
 
-      // Update the postArray to reflect the like/unlike change
       setPostArray((prevPosts) =>
         prevPosts.map((post) =>
           post._id === postId
@@ -135,7 +149,6 @@ const MyProfile = () => {
   };
 
   const handleDeletePost = async (mediaId) => {
-    // pop up confirmation before deletion
     if (!window.confirm('Are you sure you want to delete this post?')) {
       return;
     }
@@ -144,7 +157,6 @@ const MyProfile = () => {
       return;
     }
     try {
-      console.log('Deleting post with ID:', mediaId);
       const response = await fetch(`/api/media/delete/${mediaId}`, {
         method: 'DELETE',
         headers: {
@@ -154,14 +166,61 @@ const MyProfile = () => {
       if (!response.ok) {
         throw new Error('Failed to delete post');
       }
-      // Remove the deleted post from the UI
       setPostArray((prevPosts) => prevPosts.filter((post) => post._id !== mediaId));
     } catch (error) {
       console.error('Error deleting post:', error);
     }
   };
 
-  if (!user) return <div className="loading"><img src={logo} alt="Loading..." /><p>Loading...</p></div>;
+  const openEditModal = (post) => {
+  setEditPost(post);
+  setEditTitle(post.title);
+  setEditDescription(post.description);
+  setShowEditModal(true);
+};
+
+const handleEditSubmit = async (e) => {
+  e.preventDefault();
+  
+  const charLimit = 500;
+  if (editDescription.length > charLimit) {
+    alert(`Your description exceeds the ${charLimit} character limit. Please shorten it.`);
+    return; 
+  }
+  const titleLimit = 20; 
+  if (editTitle.length > titleLimit) {
+    alert(`Your title exceeds the ${titleLimit} character limit. Please shorten it.`);
+    return;
+  }
+  try {
+    const response = await fetch(`/api/media/update/${editPost._id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify({
+        title: editTitle,
+        description: editDescription,
+      }),
+    });
+    if (!response.ok) throw new Error('Failed to update post');
+
+    setPostArray((prevPosts) =>
+      prevPosts.map((post) =>
+        post._id === editPost._id
+          ? { ...post, title: editTitle, description: editDescription }
+          : post
+      )
+    );
+    setShowEditModal(false);
+    setEditPost(null);
+  } catch (error) {
+    console.error('Error updating post:', error);
+  }
+};
+
+  if (!user) return <div className="loading"><img src="/images/photo-gallery.png" alt="Loading..." /><p>Loading...</p></div>;
 
   return (
     <div className="profile">
@@ -170,12 +229,12 @@ const MyProfile = () => {
           {imageUrl ? (
             <img src={imageUrl} alt="Uploaded" />
           ) : (
-            <img src={image} alt="Default" />
+            <img src="images/user.png" alt="Default" />
           )}
           <div className="bio">
             <div className="bio-buttons">
               <Link to={`/edit/profile/${user?._id}`}>
-                <button className="edit-button">Edit Profile</button>
+                <button className="edit-button">Edit</button>
               </Link>
               <Link to="/postform">
                 <button className="bio-button">+</button>
@@ -192,18 +251,7 @@ const MyProfile = () => {
           <FollowersList followers={followers} />
           <FollowingList following={following} />
       </div>
-      <div className="sharelinks">
-              <button>Share:</button>
-              <FacebookShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
-                <img src="./images/facebook.png" alt="Facebook" />
-              </FacebookShareButton>
-              <TwitterShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
-                <img src="./images/twitter.png" alt="Twitter" />
-              </TwitterShareButton>
-              <LinkedinShareButton url={shareUrl} title={`Check out ${user?.username}'s profile!`}>
-                <img src="./images/linkedin.png" alt="Linkedin" />
-              </LinkedinShareButton>
-            </div>
+          <ShareLinks shareUrl={shareUrl} username={user.username} />
           </div>
       </div>
       <div className="posts">
@@ -219,14 +267,49 @@ const MyProfile = () => {
               shareUrl={shareUrl}
               handleLikeChange={() => handleLikeChange(post._id)}
             />
-            <button
-              className="delete-button"
-              onClick={() => handleDeletePost(post._id)}>
-              <img src="/images/bin.png" alt="Delete" className="delete-icon" />
-            </button>
-          </div>
+            <div className="buttons">
+              <button
+                className="btn"
+                onClick={() => openEditModal(post)}
+                style={{ marginRight: '8px' }}>
+                <img src="/images/edit-button.png" alt="Edit" className="edit-icon" />
+              </button>
+              <button
+                className="btn"
+                onClick={() => handleDeletePost(post._id)}>
+                <img src="/images/bin.png" alt="Delete" className="delete-icon" />
+              </button>
+              </div>
+            </div>
         ))}
       </div>
+      {showEditModal && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <h2>Edit Post</h2>
+      <form onSubmit={handleEditSubmit}>
+        <label>
+          <p>Title:</p>
+          <textarea className='desc'
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+          />
+        </label>
+        <label>
+          <p>Description:</p>
+          <textarea className='desc'
+            value={editDescription}
+            onChange={(e) => setEditDescription(e.target.value)}
+          />
+        </label>
+        <div className="buttons">
+          <button type="submit" className="edit-button">Save</button>
+          <button className="cancel-button" onClick={() => setShowEditModal(false)}>Cancel</button>
+          </div>
+        </form>
+    </div>
+  </div>
+)}
     </div>
   );
 };

@@ -1,22 +1,18 @@
 const express = require('express')
 const requireAuth = require('../middleware/requireAuth')
 
-// controller functions
 const { loginUser, signupUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword, getFollowing } = require('../controllers/userController')
 
 
 const multer = require('multer');
 
-// Set up multer with memory storage
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 const router = express.Router()
 
-// login route
 router.post('/login', loginUser)
 
-// signup route
 router.post('/signup', signupUser)
 
 router.get('/myprofile', getMe)
@@ -25,7 +21,6 @@ router.post("/forgot-password", forgotPassword)
 
 router.post("/reset-password/:token", resetPassword)
 
-// require auth
 router.use(requireAuth);
 
 router.get('/user/:id', getUser)

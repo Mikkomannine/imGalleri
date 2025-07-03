@@ -1,5 +1,3 @@
-
-
 import { Link } from 'react-router-dom';
 import '../css/Post.css';
 import { useState, useEffect } from 'react';
@@ -8,12 +6,17 @@ const CommentDetails = ({ comment, currentUserId, mediaId, onDelete }) => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch(`http://localhost:3001/api/users/user/${comment.postedBy}`, {
+            const response = await fetch(`/api/users/user/${comment.postedBy}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
             const user = await response.json();
             setUser(user);
         };
@@ -21,6 +24,7 @@ const CommentDetails = ({ comment, currentUserId, mediaId, onDelete }) => {
     }, [comment.postedBy]);
 
     const handleDelete = async () => {
+        if (!window.confirm('Are you sure you want to delete this comment?')) return;
         try {
             const response = await fetch(`/api/media/delete/${mediaId}/${comment._id}`, {
                 method: 'DELETE',
@@ -28,7 +32,11 @@ const CommentDetails = ({ comment, currentUserId, mediaId, onDelete }) => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
             const data = await response.json();
             if (!response.ok) throw new Error(data.message);
             if (onDelete) onDelete(comment._id);

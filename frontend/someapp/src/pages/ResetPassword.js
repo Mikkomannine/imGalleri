@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ const ResetPassword = () => {
   const handleReset = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:3001/api/users/reset-password/${token}`, { newPassword });
+      const res = await axios.post(`/api/users/reset-password/${token}`, { newPassword });
       setMsg(res.data.message);
     } catch (err) {
       setMsg(err.response?.data?.message || 'Something went wrong');

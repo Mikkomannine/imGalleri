@@ -3,20 +3,23 @@ import '../css/profile.css';
 function UnfollowButton({ userId, onFollowChange }) {
   const handleUnfollow = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/users/unfollow/${userId}`, {
+      const response = await fetch(`/api/users/unfollow/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
         },
-       // body: JSON.stringify({ _id: localStorage.getItem('currentUserId') }),
       });
-
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
       if (!response.ok) {
         throw new Error('Failed to unfollow user');
       }
         console.log(response);
-      onFollowChange(); // Callback to update UI based on follow/unfollow action
+      onFollowChange();
     } catch (error) {
       console.error('Unfollow error:', error);
     }

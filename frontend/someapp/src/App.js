@@ -1,26 +1,23 @@
-import React from 'react';
-import MyProfile from './pages/myProfile'; // Import the myprofile
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import MyProfile from './pages/myProfile';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
-// pages & components
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import PostForm from './pages/postform';
-import UpdatePost from './pages/updatePost';
 import ProfilePage from './pages/profile';
 import Home from './pages/home';
 import Post from './pages/post';
 import EditProfilePage from './pages/EditProfilePage';
 import Layout from './components/layout';
-import { useLocation } from 'react-router-dom';
 import ForgotPassword from './pages/forgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Following from './pages/Following';
 
 
 function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
-  const location = useLocation(); // Now useLocation is used within the context of <BrowserRouter>
+  const location = useLocation();
   const showLayout = !['/login', '/signup'].includes(location.pathname);
 
   const routes = [
@@ -28,7 +25,6 @@ function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
     { path: "/myprofile", element: <MyProfile /> },
     { path: "/postform", element: <PostForm /> },
     { path: "/post/:id", element: <Post /> },
-    { path: "/:id/update", element: <UpdatePost /> },
     { path: "/profile/:id", element: <ProfilePage /> },
     { path: "/edit/profile/:id", element: <EditProfilePage /> },
     { path: "/login", element: <Login setIsAuthenticated={setIsAuthenticated} />, isAuthenticated: false },
@@ -58,6 +54,11 @@ function RoutesComponent({ setIsAuthenticated, isAuthenticated }) {
     </>
   );
 }
+
+RoutesComponent.propTypes = {
+  setIsAuthenticated: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
+};
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(Boolean(localStorage.getItem("token")));

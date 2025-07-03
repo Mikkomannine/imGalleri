@@ -1,7 +1,6 @@
 import useField from "../hooks/useField";
 import useLogin from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
-import logo from './photo-gallery.png';
 import { Link } from "react-router-dom";
 import '../css/login.css';
 
@@ -17,7 +16,6 @@ const Login = ({ setIsAuthenticated }) => {
     e.preventDefault();
     await login({ username: username.value, password: password.value });
     if (!error && localStorage.getItem("token")) {
-      console.log("success");
       setIsAuthenticated(true);
       navigate("/");
     }
@@ -26,9 +24,9 @@ const Login = ({ setIsAuthenticated }) => {
     }
   };
   return (
-    <div className="containerj">
+    <div className="container">
       <div className="brand-section">
-      <img className="logo" src={logo} alt="logo" />
+      <img className="logo" src="/images/photo-gallery.png" alt="logo" />
         <h1>imGalleri</h1>
         <p>
         Welcome to imGalleri! Your journey in pixels starts here. Capture life’s essence and share your creativity.

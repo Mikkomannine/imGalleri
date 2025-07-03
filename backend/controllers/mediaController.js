@@ -8,7 +8,6 @@ const User = require('../models/userModel');
 const getAllMedia = async (req, res) => {
   try {
     let media = await Media.find().sort({createdAt: -1})
-
         for (let i = 0; i < media.length; i++) {
           if (media[i].imageKey) {
             const imageUrl = await generateSignedUrl(media[i].imageKey);
@@ -18,6 +17,9 @@ const getAllMedia = async (req, res) => {
         }
     res.status(200).json(media)
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
@@ -42,6 +44,9 @@ const getUsersMedia = async (req, res) => {
 
     res.status(200).json(mediaArray);
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
@@ -57,12 +62,14 @@ const addMedia = async (req, res) => {
     await newMedia.save();
     res.status(201).json(newMedia);
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
 };
 
-// Get Media by ID
 const getMedia = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -80,12 +87,14 @@ const getMedia = async (req, res) => {
         }
     res.status(200).json(media);
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
 }
 
-// Delete Media by ID
 const deleteMedia = async (req, res) => {
   const {mediaId} = req.params;
   try {
@@ -96,15 +105,16 @@ const deleteMedia = async (req, res) => {
     if (!media) {
       return res.status(404).json({ message: 'Media not found' });
     }
-    // Optionally, delete the image from S3
     res.status(200).json({ message: 'Media deleted successfully' });
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
 }
 
-// Update Media by ID
 const updateMedia = async (req, res) => {
   const { id } = req.params;
   try {
@@ -119,6 +129,9 @@ const updateMedia = async (req, res) => {
     }
     res.status(200).json(media);
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
@@ -129,7 +142,6 @@ const getMediaByFollowing = async (req, res) => {
     console.log("getMediaByFollowing called");
     const userId = req.user._id;
 
-    // Fetch the current user's following list
     const user = await User.findById(userId).select('following');
     if (!user) {
         return res.status(404).json({ error: 'User not found' });
@@ -140,7 +152,6 @@ const getMediaByFollowing = async (req, res) => {
         return res.status(404).json({ error: 'No followed users' });
     }
 
-    // Fetch media posted by followed users
     const media = await Media.find({ user_id: { $in: followingList } }).sort({ createdAt: -1 });
 
     for (let i = 0; i < media.length; i++) {
@@ -157,6 +168,9 @@ const getMediaByFollowing = async (req, res) => {
 
     res.status(200).json(media);
 } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error('Error fetching media from followed users:', error);
     res.status(500).json({ error: 'Server Error' });
 }
@@ -167,6 +181,9 @@ const deleteAllMedia = async (req, res) => {
     await Media.deleteMany();
     res.status(200).json({ message: 'All Media deleted successfully' });
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error(error);
     res.status(500).json({ error: 'Server Error' });
   }
@@ -174,7 +191,7 @@ const deleteAllMedia = async (req, res) => {
 const addComment = async (req, res) => {
   const { text } = req.body;
   const mediaId = req.params.id;
-  const userId = req.user._id; // Assuming you have user info in req.user
+  const userId = req.user._id;
 
   if (!text) {
       return res.status(400).json({ message: 'Comment text is required' });
@@ -193,6 +210,9 @@ const addComment = async (req, res) => {
 
       res.status(201).json({ message: 'Comment added successfully', media });
   } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired' });
+      }
       res.status(500).json({ message: 'Error adding comment', error });
   }
 };
@@ -208,14 +228,16 @@ const getComments = async (req, res) => {
 
       res.status(200).json(media.comments);
   } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired' });
+      }
       res.status(500).json({ message: 'Error fetching comments', error });
   }
 }
 
-// Delete comment controller
 const deleteComment = async (req, res) => {
   const { mediaId, commentId } = req.params;
-  const userId = req.user._id; // assuming authentication middleware adds this
+  const userId = req.user._id;
 
   try {
     const media = await Media.findById(mediaId);
@@ -223,7 +245,6 @@ const deleteComment = async (req, res) => {
       return res.status(404).json({ message: 'Media not found' });
     }
 
-    // Use findIndex to locate the comment reliably
     const commentIndex = media.comments.findIndex(
       (c) => c._id.toString() === commentId
     );
@@ -240,12 +261,14 @@ const deleteComment = async (req, res) => {
     console.log("commentIndex", commentIndex);
     console.log("comment", comment);
 
-    // Remove comment using splice
     media.comments.splice(commentIndex, 1);
     await media.save();
 
     res.status(200).json({ message: 'Comment deleted successfully', media });
   } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
     console.error('Delete comment error:', error);
     res.status(500).json({ message: 'Error deleting comment', error });
   }
@@ -254,7 +277,6 @@ const deleteComment = async (req, res) => {
 
 const likePost = async (req, res) => {
   try {
-      // Assuming req.params.id and req.body.userId are validated to be non-null, non-undefined, and valid ObjectId strings
       const postId = req.params.id;
       const currentUserId = req.user._id;
 
@@ -276,7 +298,10 @@ const likePost = async (req, res) => {
 
       res.status(200).json({ message: "Post has been liked!", media});
   } catch (err) {
-      console.error(err); // More detailed error handling/logging can be implemented here
+      if (err.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired' });
+      }
+      console.error(err);
       res.status(500).json({ message: "An error occurred", error: err });
   }
 };
@@ -311,25 +336,27 @@ const unlikePost = async (req, res) => {
       res.status(200).json( { message: "post unliked successfully", media });
   }
   catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ error: 'Token expired' });
+    }
       res.status(500).json({ message: 'Error unliking post', error });
   }
 }
 
 const checkLikeStatus = async (req, res) => {
   try {
-      const postId = req.params.id; // Corrected the way userId is extracted from req.params
-      const currentUserId = req.user._id; // Assuming you have middleware to set req.user based on the auth token
-
-      // Find the current user and check if the 'following' array contains the userId
+      const postId = req.params.id;
+      const currentUserId = req.user._id;
       const currentUser = await User.findById(currentUserId);
       if (!currentUser) { 
           return res.status(404).json({ message: 'User not found' });
       }
-
       const isLiked = currentUser.liked.some(likedId => likedId.toString() === postId);
-
-      res.json({ isLiked }); // This will return true or false based on the condition
+      res.json({ isLiked });
   } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({ error: 'Token expired' });
+      }
       console.error('Failed to check follow status:', error);
       res.status(500).send('Server error');
   }

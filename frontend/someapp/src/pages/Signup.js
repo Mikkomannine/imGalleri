@@ -1,7 +1,6 @@
 import useField from "../hooks/useField";
 import useSignup from "../hooks/useSignup";
 import { useNavigate } from "react-router-dom";
-import logo from './photo-gallery.png';
 import { Link } from "react-router-dom";
 
 const Signup = ({ setIsAuthenticated }) => {
@@ -29,9 +28,9 @@ const Signup = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="containerj">
+    <div className="container">
           <div className="brand-section">
-          <img className="logo" src={logo} alt="logo" />
+          <img className="logo" src="/images/photo-gallery.png" alt="logo" />
             <h1>imGalleri</h1>
             <p>
             Welcome to imGalleri! Your journey in pixels starts here. Capture life’s essence and share your creativity.

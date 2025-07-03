@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from 'react-router-dom';
-import logo from './photo-gallery.png';
 import axios from 'axios';
-import image from './user.png';
 
 const UpdateProfile = () => {
     const { id } = useParams();
@@ -20,14 +18,17 @@ const UpdateProfile = () => {
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await fetch(`http://localhost:3001/api/users/myprofile`, {
+            const res = await fetch(`/api/users/myprofile`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
             });
+            if (res.status === 401) {
+                localStorage.removeItem("token");
+                navigate("/login");
+                return;
+            }
             const data = await res.json();
-            
-
             if (res.ok) {
                 console.log(data);
                 setUser(data.user);
@@ -65,9 +66,13 @@ const UpdateProfile = () => {
                 Authorization: `Bearer ${localStorage.getItem("token")}`
             }
         });
+        if (response.status === 401) {
+            localStorage.removeItem("token");
+            navigate("/login");
+            return;
+        }
         if (response.ok) {
             navigate("/myprofile");
-            console.log("Updated profile" + response);
         }
     }
     const handleFileChange = (event) => {
@@ -77,10 +82,9 @@ const UpdateProfile = () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = () => {
-                setImageUrl(reader.result); // Set the image preview URL
-                console.log("RESULT" + reader.result);
+                setImageUrl(reader.result);
             };
-            reader.readAsDataURL(file); // Read the file as a data URL
+            reader.readAsDataURL(file);
         }
     };
     
@@ -101,20 +105,29 @@ const UpdateProfile = () => {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           });
+          if (response.status === 401) {
+            localStorage.removeItem('token');
+            navigate('/login');
+            return;
+          }
           console.log(response.data);
           if (response.data) {
             alert('Image uploaded successfully');
-            console.log("image uploaded!", response.data);
             setUpdate(true);
           } else {
             console.warn("No image URL found in upload response");
           }
         } catch (error) {
+          if (error.response && error.response.status === 401) {
+            localStorage.removeItem('token');
+            navigate('/login');
+            return;
+          }
           console.error('Error uploading image:', error);
           alert('Error uploading image');
         }
       };
-if (!user) return <div className='loading'><img src={logo}></img><p>Loading...</p></div>;
+if (!user) return <div className='loading'><img src="/images/photo-gallery.png"></img><p>Loading...</p></div>;
     return (
         <div className="update-wrapper">
             <h2>Update profile</h2>
@@ -122,7 +135,7 @@ if (!user) return <div className='loading'><img src={logo}></img><p>Loading...</
                   {imageUrl ? (
                      <img src={imageUrl} alt="Uploaded" />
                     ) : (
-                      <img src={image} alt="Default" />
+                      <img src="/images/user.png" alt="Default" />
                     )}
             </div>
                     <form className='bio-buttons' onSubmit={handleSubmit}>

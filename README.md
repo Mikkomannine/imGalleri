@@ -5,7 +5,7 @@ imGalleri is a social media application that allows users to share and explore i
 - Image uploading
 - User profiles and follow system
 - Commenting and liking posts
-- Explore page with trending images
+- Explore and following pages
 
 ## Technologies
 
@@ -14,5 +14,3 @@ imGalleri is a social media application that allows users to share and explore i
 - React.js
 - MongoDB
 - AWS
-
-### The project is still in progress!

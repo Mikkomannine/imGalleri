@@ -1,26 +1,28 @@
-
 import { useEffect, useState } from 'react';
 import PostDetails from '../components/postDetails';
-import logo from './photo-gallery.png';
 import FollowingList from '../components/FollowingList';
+
+
 
 const FollowingPage = () => {
     const [posts, setPosts] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(null);
     const [following, setFollowing] = useState([]);
-    const [user, setUser] = useState(null);
 
-    // Fetch the current user's ID
     const fetchCurrentUser = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/users/myprofile`, {
+            const response = await fetch(`/api/users/myprofile`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
             const data = await response.json();
-            setUser(data.user);
             setCurrentUserId(data.user._id);
         } catch (error) {
             console.error('Error fetching current user:', error);
@@ -31,26 +33,34 @@ const getFollowing = async () => {
       const response = await fetch("/api/users/following/" + currentUserId, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
+      if (response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/login';
+        return;
+      }
       const data = await response.json();
       if (!response.ok) {
         console.log("error fetching following");
         setFollowing([]);
         return;
       }
-      console.log("following was first", data);
       setFollowing(data);
     };
       
 
-    // Fetch posts by users the current user follows
     const fetchFollowingPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/media/following/medias`, {
+            const response = await fetch(`/api/media/following/medias`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
             const data = await response.json();
             if (!response.ok) {
                 throw new Error('Failed to fetch posts');
@@ -61,14 +71,17 @@ const getFollowing = async () => {
         }
     };
 
-    // Fetch data on component mount
-    useEffect(() => {
-        fetchCurrentUser();
-        fetchFollowingPosts();
-        getFollowing();
-    }, []);
+useEffect(() => {
+    fetchCurrentUser();
+}, []);
 
-    // Handle like/unlike functionality
+useEffect(() => {
+    if (currentUserId) {
+        getFollowing();
+        fetchFollowingPosts();
+    }
+}, [currentUserId]);
+
     const handleLikeChange = async (postId) => {
         try {
             const response = await fetch(`/api/media/like/${postId}`, {
@@ -77,12 +90,14 @@ const getFollowing = async () => {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
-
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
             if (!response.ok) {
                 throw new Error('Failed to like/unlike the post');
             }
-
-            // Update the posts state to reflect the like/unlike change
             setPosts((prevPosts) =>
                 prevPosts.map((post) =>
                     post._id === postId
@@ -95,10 +110,14 @@ const getFollowing = async () => {
         }
     };
 
+    if (!currentUserId) return <div className='loading'><img src="/images/photo-gallery.png"></img><p>Loading...</p></div>;
+
     return (
-        <div className="following-page">
-            <div className="posts">
-                {posts.length === 0 && <div className='loading'><img src={logo}></img><p>Loading...</p></div>}
+        <div className="home">
+            <div>
+                <FollowingList following={following} />
+            </div>
+            <div className="home-posts">
                 {posts.map((post) => (
                     <PostDetails
                         key={post._id}
@@ -106,14 +125,10 @@ const getFollowing = async () => {
                         isLiked={post.likes.includes(currentUserId)}
                         likes={post.likes}
                         userId={post.user_id}
-                        username={post.username}
-                        shareUrl={`${window.location.origin}/post/${post._id}`}
+                        shareUrl className={`${window.location.origin}/post/${post._id}`}
                         handleLikeChange={() => handleLikeChange(post._id)}
                     />
                 ))}
-            </div>
-            <div className="followerFollowing">
-                <FollowingList following={following} />
             </div>
         </div>
     );

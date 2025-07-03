@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../css/Post.css';
 import CommentDetails from '../components/commentDetails';
-import logo from './photo-gallery.png';
 import PostDetails from '../components/postDetails';
 
 const Post = () => {
@@ -18,27 +17,30 @@ const Post = () => {
     const [currentUserId, setCurrentUserId] = useState(null);
 
     const fetchCurrentUser = async () => {
-        const response = await fetch(`http://localhost:3001/api/users/myprofile`, {
+        const response = await fetch(`/api/users/myprofile`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
         });
+        if (response.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+            return;
+        }
         const data = await response.json();
-        console.log("Current logged-in user ID:", data.user._id); // Log the user ID
-        setCurrentUserId(data.user._id); // Assumes backend returns { _id, username, ... }
+        console.log("Current logged-in user ID:", data.user._id);
+        setCurrentUserId(data.user._id);
     };
 
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
 
-        const charLimit = 200; // Set your character limit here
-
+        const charLimit = 200;
         if (comment.length > charLimit) {
             alert(`Your comment exceeds the ${charLimit} character limit. Please shorten it.`);
-            return; // Prevent submission if character limit is exceeded
+            return;
         }
-
         try {
             const response = await fetch(`/api/media/addComment/${id}`, {
               method: 'POST',
@@ -48,22 +50,23 @@ const Post = () => {
               },
               body: JSON.stringify({ text: comment })
             });
-        
+            if (response.status === 401) {
+                localStorage.removeItem('token');
+                window.location.href = '/login';
+                return;
+            }
             const data = await response.json();
         
             if (!response.ok) {
               throw new Error(data.message || 'Failed to add comment');
             }
-        
-            console.log('Comment added:', data);
-            
-            const newComment = data.media.comments[data.media.comments.length - 1]; // Get the newly added comment
+    
+            const newComment = data.media.comments[data.media.comments.length - 1];
             setComments((prevComments) => [...prevComments, newComment]);
             setComment('');
 
           } catch (error) {
             console.error('Error:', error.message);
-            // Show user feedback, e.g., toast
           }
       };
 
@@ -75,7 +78,6 @@ const Post = () => {
              }});
         const data = await response.json();
         setisLiked(data.isLiked);
-        console.log("like status: ", data.isLiked);
     }
 
   
@@ -94,15 +96,14 @@ const Post = () => {
       };
 
     const fetchUserByPost = async () => {
-        if (!userId) return; // Check if userId is available before making the request
-        const response = await fetch(`http://localhost:3001/api/users/user/${userId}`, {
+        if (!userId) return;
+        const response = await fetch(`/api/users/user/${userId}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             }});
         const data = await response.json();
         setUsername(data.username);
-        console.log("user: ", data);
     };
 
     const handleLikeChange = () => {
@@ -113,12 +114,12 @@ const Post = () => {
     useEffect(() => {
         fetchPost();
         checkLikedStatus();
-        fetchCurrentUser(); // Fetch current user ID on component mount
+        fetchCurrentUser();
     }, [id]);
     
     useEffect(() => {
         if (userId) {
-            fetchUserByPost(); // Fetch the user only after userId is updated
+            fetchUserByPost();
         }
     }, [userId]);
 
@@ -126,7 +127,7 @@ const Post = () => {
     if (!post || !currentUserId) 
         return (
             <div className="loading">
-                <img src={logo} alt="Loading..." /><p>Loading...</p>
+                <img src="/images/photo-gallery.png" alt="Loading..." /><p>Loading...</p>
             </div>
         );
 

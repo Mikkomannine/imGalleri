@@ -17,13 +17,10 @@ app.use(express.json());
 
 app.use(customMiddleware.requestLogger);
 
-
-
 app.get("/", (req, res) => res.send("API Running!"));
 
 app.use("/api/media", mediaRouter);
 app.use("/api/users", userRouter);
-
 
 app.use(customMiddleware.unknownEndpoint);
 app.use(customMiddleware.errorHandler);

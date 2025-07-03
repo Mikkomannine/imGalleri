@@ -8,8 +8,7 @@
 .post {
     display: flex;
     flex-direction: column;
-    width: 100%;
-    max-width: 400px;
+    max-width: 100%;
     margin: 10px 0;
     padding: 20px;
     border-radius: 8px;
@@ -27,10 +26,18 @@
 @media screen and (max-width: 450px) {
     .post img {
         width: 100%;
-        margin-left: 20px;
+    }
+
+    .likebutton
+.like img,
+.likebutton
+.unlike img {
+        width: 20px;
+        height: 20px;
     }
 
 }
+
 .post-wrapper {
     display: flex;
     align-items: center;
@@ -229,8 +236,20 @@
     margin-top: 5px;
   }
 
-  .postdesc {
+  .post-desc {
     margin: 10px 0;
+    font-size: 16px;
+    color: black;
+    text-align: start;
+    word-wrap: break-word;
+    margin: 10px;
+    max-height: 75px;
+    overflow: auto;
+  }
+
+  .post-title {
+    margin: 5px;
+    font-size: 25px;
   }
 
   .comment-text {
