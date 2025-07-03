@@ -17,7 +17,7 @@
     "react-share": "^5.2.2",
     "web-vitals": "^2.1.4"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "https://imgalleri-backend.onrender.com",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
