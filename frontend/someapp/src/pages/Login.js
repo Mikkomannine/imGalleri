@@ -10,7 +10,7 @@ const Login = ({ setIsAuthenticated }) => {
   const username = useField("username");
   const password = useField("password");
 
-  const API_BASE = process.env.REACT_APP_API_BASE_URL;
+  const API_BASE = process.env.API_URL;
 
   const { login, error } = useLogin(`${API_BASE}/api/users/login`);
 
