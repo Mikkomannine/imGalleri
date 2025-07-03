@@ -10,7 +10,9 @@ const Login = ({ setIsAuthenticated }) => {
   const username = useField("username");
   const password = useField("password");
 
-  const { login, error } = useLogin("/api/users/login");
+  const API_BASE = process.env.REACT_APP_API_BASE_URL;
+
+  const { login, error } = useLogin(`${API_BASE}/api/users/login`);
 
   const handleLogin = async (e) => {
     e.preventDefault();
