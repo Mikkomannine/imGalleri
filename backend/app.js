@@ -5,7 +5,6 @@ const connectDB = require("./config/db");
 const customMiddleware = require("./middleware/customMiddleware");
 const mediaRouter = require("./routers/mediaRouter");
 const userRouter = require("./routers/userRouter");
-const path = require("path");
 
 // express app
 const app = express();
@@ -22,11 +21,6 @@ app.get("/", (req, res) => res.send("API Running!"));
 
 app.use("/api/media", mediaRouter);
 app.use("/api/users", userRouter);
-
-app.use(express.static(path.join(__dirname, "../frontend/someapp/build")));
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/someapp/build", "index.html"));
-});
 
 app.use(customMiddleware.unknownEndpoint);
 app.use(customMiddleware.errorHandler);

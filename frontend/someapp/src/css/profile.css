@@ -123,6 +123,7 @@
     height: 35px;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color: rgb(47, 122, 214);
+    color: white;
 }
 
 .unfollow {
@@ -139,6 +140,7 @@
     height: 35px;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     background-color: rgb(53, 214, 47);
+    color: white;
 }
 
 .fade-follow-container {
