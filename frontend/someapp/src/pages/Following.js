@@ -8,10 +8,11 @@ const FollowingPage = () => {
     const [posts, setPosts] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(null);
     const [following, setFollowing] = useState([]);
-
+    const API_BASE = process.env.REACT_APP_API_URL;
+    
     const fetchCurrentUser = async () => {
         try {
-            const response = await fetch(`/api/users/myprofile`, {
+            const response = await fetch(`${API_BASE}/api/users/myprofile`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -30,7 +31,7 @@ const FollowingPage = () => {
     };
 
 const getFollowing = async () => {
-      const response = await fetch("/api/users/following/" + currentUserId, {
+      const response = await fetch(`${API_BASE}/api/users/following/` + currentUserId, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (response.status === 401) {
@@ -50,7 +51,7 @@ const getFollowing = async () => {
 
     const fetchFollowingPosts = async () => {
         try {
-            const response = await fetch(`/api/media/following/medias`, {
+            const response = await fetch(`${API_BASE}/api/media/following/medias`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -84,7 +85,7 @@ useEffect(() => {
 
     const handleLikeChange = async (postId) => {
         try {
-            const response = await fetch(`/api/media/like/${postId}`, {
+            const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,

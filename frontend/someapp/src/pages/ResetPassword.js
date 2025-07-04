@@ -6,11 +6,12 @@ const ResetPassword = () => {
   const { token } = useParams();
   const [newPassword, setNewPassword] = useState('');
   const [msg, setMsg] = useState('');
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const handleReset = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`/api/users/reset-password/${token}`, { newPassword });
+      const res = await axios.post(`${API_BASE}/api/users/reset-password/${token}`, { newPassword });
       setMsg(res.data.message);
     } catch (err) {
       setMsg(err.response?.data?.message || 'Something went wrong');

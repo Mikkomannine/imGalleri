@@ -1,9 +1,10 @@
 import '../css/Post.css';
 
 function LikeButton({ userId, onLikeChange }) {
+  const API_BASE = process.env.REACT_APP_API_URL;
   const handleLike = async () => {
     try {
-      const response = await fetch(`/api/media/like/${userId}`, {
+      const response = await fetch(`${API_BASE}/api/media/like/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

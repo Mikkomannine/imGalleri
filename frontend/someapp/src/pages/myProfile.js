@@ -19,6 +19,7 @@ const MyProfile = () => {
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const shareUrl = window.location.href;
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchMyProfile = async () => {
@@ -30,7 +31,7 @@ const MyProfile = () => {
         },
       };
       try {
-        const res = await fetch(`/api/users/myprofile`, config);
+        const res = await fetch(`${API_BASE}/api/users/myprofile`, config);
         if (res.status === 401) {
           localStorage.removeItem('token');
           window.location.href = '/login';
@@ -57,7 +58,7 @@ const MyProfile = () => {
       return;
     }
     const getFollowers = async () => {
-      const response = await fetch("/api/users/followers/" + user._id, {
+      const response = await fetch(`${API_BASE}/api/users/followers/` + user._id, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (response.status === 401) {
@@ -81,7 +82,7 @@ const MyProfile = () => {
       return;
     }
     const getFollowing = async () => {
-      const response = await fetch("/api/users/following/" + user._id, {
+      const response = await fetch(`${API_BASE}/api/users/following/` + user._id, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (response.status === 401) {
@@ -103,7 +104,7 @@ const MyProfile = () => {
   useEffect(() => {
     if (user && user._id) {
       const getPosts = async () => {
-        const response = await fetch(`/api/media/user/${user._id}`, {
+        const response = await fetch(`${API_BASE}/api/media/user/${user._id}`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
         if (response.status === 401) {
@@ -125,7 +126,7 @@ const MyProfile = () => {
 
   const handleLikeChange = async (postId) => {
     try {
-      const response = await fetch(`/api/media/like/${postId}`, {
+      const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -157,7 +158,7 @@ const MyProfile = () => {
       return;
     }
     try {
-      const response = await fetch(`/api/media/delete/${mediaId}`, {
+      const response = await fetch(`${API_BASE}/api/media/delete/${mediaId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -193,7 +194,7 @@ const handleEditSubmit = async (e) => {
     return;
   }
   try {
-    const response = await fetch(`/api/media/update/${editPost._id}`, {
+    const response = await fetch(`${API_BASE}/api/media/update/${editPost._id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

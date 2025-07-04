@@ -12,6 +12,7 @@ const PostForm = () => {
     const [scale, setScale] = useState(1);
     const navigate = useNavigate();
     const imagePreviewRef = useRef(null);
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -33,7 +34,7 @@ const PostForm = () => {
         formData.append('scale', scale);
 
         try {
-          const response = await axios.post(`/api/media`, formData, {
+          const response = await axios.post(`${API_BASE}/api/media`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${localStorage.getItem('token')}`,

@@ -7,12 +7,13 @@ import { useState, useEffect as UseEffect } from 'react';
 
 const PostDetails = ({ post, isLiked, likes, userId, shareUrl, handleLikeChange }) => {
     const [username, setUsername] = useState("");
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     UseEffect(() => {
         const fetchUsernameFromPost = async () => {
             if (!userId) return;
             try {
-                const response = await fetch(`/api/users/user/${userId}`, {
+                const response = await fetch(`${API_BASE}/api/users/user/${userId}`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,

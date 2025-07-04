@@ -5,11 +5,12 @@ import '../css/resetPassword.css';
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
   const [msg, setMsg] = useState('');
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/users/forgot-password', { email });
+      const res = await axios.post(`${API_BASE}/api/users/forgot-password`, { email });
       setMsg(res.data.message);
     } catch (err) {
       setMsg(err.response?.data?.message || 'Something went wrong');

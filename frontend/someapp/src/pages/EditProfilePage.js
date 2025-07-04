@@ -15,10 +15,11 @@ const UpdateProfile = () => {
     const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
     const [update, setUpdate] = useState(false);
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         const fetchUser = async () => {
-            const res = await fetch(`/api/users/myprofile`, {
+            const res = await fetch(`${API_BASE}/api/users/myprofile`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("token")}`
                 }
@@ -58,7 +59,7 @@ const UpdateProfile = () => {
             return;
         }
         const profile = { firstName, lastName, phoneNumber, email, bio };
-        const response = await fetch(`/api/users/${id}/edit`, {
+        const response = await fetch(`${API_BASE}/api/users/${id}/edit`, {
             method: "PATCH",
             body: JSON.stringify(profile),
             headers: {
@@ -99,7 +100,7 @@ const UpdateProfile = () => {
         formData.append('image', file);
     
         try {
-          const response = await axios.patch(`/api/users/upload`, formData, {
+          const response = await axios.patch(`${API_BASE}/api/users/upload`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
                 Authorization: `Bearer ${localStorage.getItem('token')}`,

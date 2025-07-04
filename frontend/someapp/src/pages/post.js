@@ -15,9 +15,10 @@ const Post = () => {
     const [username, setUsername] = useState(null);
     const shareUrl = window.location.href;
     const [currentUserId, setCurrentUserId] = useState(null);
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     const fetchCurrentUser = async () => {
-        const response = await fetch(`/api/users/myprofile`, {
+        const response = await fetch(`${API_BASE}/api/users/myprofile`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -29,7 +30,6 @@ const Post = () => {
             return;
         }
         const data = await response.json();
-        console.log("Current logged-in user ID:", data.user._id);
         setCurrentUserId(data.user._id);
     };
 
@@ -42,7 +42,7 @@ const Post = () => {
             return;
         }
         try {
-            const response = await fetch(`/api/media/addComment/${id}`, {
+            const response = await fetch(`${API_BASE}/api/media/addComment/${id}`, {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ const Post = () => {
 
 
     const checkLikedStatus = async () => {
-        const response = await fetch(`/api/media/isLiked/${id}`,{
+        const response = await fetch(`${API_BASE}/api/media/isLiked/${id}`,{
             method: 'GET',
              headers: { Authorization: `Bearer ${localStorage.getItem('token')}`
              }});
@@ -82,7 +82,7 @@ const Post = () => {
 
   
       const fetchPost = async () => {
-        const response = await fetch(`/api/media/${id}`, {
+        const response = await fetch(`${API_BASE}/api/media/${id}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -97,7 +97,7 @@ const Post = () => {
 
     const fetchUserByPost = async () => {
         if (!userId) return;
-        const response = await fetch(`/api/users/user/${userId}`, {
+        const response = await fetch(`${API_BASE}/api/users/user/${userId}`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,

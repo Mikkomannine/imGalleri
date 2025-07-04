@@ -4,13 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import '../css/login.css';
 
-
 const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const username = useField("username");
   const password = useField("password");
 
-  const API_BASE = process.env.API_URL;
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const { login, error } = useLogin(`${API_BASE}/api/users/login`);
 

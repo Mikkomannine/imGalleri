@@ -228,7 +228,7 @@ const forgotPassword = async (req, res) => {
     user.resetTokenExpiry = Date.now() + 1000 * 60 * 60;
     await user.save();
   
-    const resetLink = `http://localhost:3000/reset-password/${token}`;
+    const resetLink = `https://imgalleri.onrender.com/reset-password/${token}`;
     await sendResetEmail(user.email, resetLink);
   
     res.send("Password reset link sent");

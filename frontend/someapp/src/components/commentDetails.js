@@ -3,10 +3,11 @@ import '../css/Post.css';
 import { useState, useEffect } from 'react';
 const CommentDetails = ({ comment, currentUserId, mediaId, onDelete }) => {
     const [user, setUser] = useState(null);
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
         const fetchUser = async () => {
-            const response = await fetch(`/api/users/user/${comment.postedBy}`, {
+            const response = await fetch(`${API_BASE}/api/users/user/${comment.postedBy}`, {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -26,7 +27,7 @@ const CommentDetails = ({ comment, currentUserId, mediaId, onDelete }) => {
     const handleDelete = async () => {
         if (!window.confirm('Are you sure you want to delete this comment?')) return;
         try {
-            const response = await fetch(`/api/media/delete/${mediaId}/${comment._id}`, {
+            const response = await fetch(`${API_BASE}/api/media/delete/${mediaId}/${comment._id}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,

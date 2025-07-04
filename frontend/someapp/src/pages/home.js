@@ -7,11 +7,12 @@ import '../css/Home.css';
 const Home = () => {
     const [posts, setPosts] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(null);
+    const API_BASE = process.env.REACT_APP_API_URL;
 
    useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
-                const response = await fetch(`/api/users/myprofile`, {
+                const response = await fetch(`${API_BASE}/api/users/myprofile`, {
                     method: 'GET',
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -40,7 +41,7 @@ const Home = () => {
             },
         };
         const fetchPosts = async () => {
-            const response = await fetch("/api/media", config);
+            const response = await fetch(`${API_BASE}/api/media`, config);
             if (response.status === 401) {
                 localStorage.removeItem('token');
                 window.location.href = '/login';
@@ -52,14 +53,13 @@ const Home = () => {
                 return;
             }
             setPosts(data);
-            console.log(data);
         };
         fetchPosts();
     }, []);
 
     const handleLikeChange = async (postId) => {
         try {
-            const response = await fetch(`/api/media/like/${postId}`, {
+            const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,

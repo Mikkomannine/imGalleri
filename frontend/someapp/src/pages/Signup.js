@@ -11,8 +11,9 @@ const Signup = ({ setIsAuthenticated }) => {
   const phoneNumber = useField("phone");
   const firstName = useField("firstName");
   const lastName = useField("lastName");
+  const API_BASE = process.env.REACT_APP_API_URL;
 
-  const { signup, error } = useSignup("/api/users/signup");
+  const { signup, error } = useSignup(`${API_BASE}/api/users/signup`);
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();

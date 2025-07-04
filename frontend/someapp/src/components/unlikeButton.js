@@ -1,9 +1,10 @@
 import '../css/Post.css';
 
 function UnlikeButton({ userId, onLikeChange }) {
+  const API_BASE = process.env.REACT_APP_API_URL;
   const handleUnlike = async () => {
     try {
-      const response = await fetch(`/api/media/unlike/${userId}`, {
+      const response = await fetch(`${API_BASE}/api/media/unlike/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -18,7 +19,6 @@ function UnlikeButton({ userId, onLikeChange }) {
       if (!response.ok) {
         throw new Error('Failed to unlike the post');
       }
-        console.log(response);
       onLikeChange();
     } catch (error) {
       console.error('Unlike error:', error);

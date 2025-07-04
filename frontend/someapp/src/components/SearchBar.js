@@ -4,9 +4,10 @@ import "../css/searchbar.css";
 
 export const SearchBar = ({ setResults }) => {
   const [input, setInput] = useState("");
+  const API_BASE = process.env.REACT_APP_API_URL;
 
   const fetchData = (value) => {
-    fetch("/api/media/", {
+    fetch(`${API_BASE}/api/media/`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },

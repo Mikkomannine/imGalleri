@@ -1,9 +1,10 @@
 import '../css/profile.css';
 
 function UnfollowButton({ userId, onFollowChange }) {
+  const API_BASE = process.env.REACT_APP_API_URL;
   const handleUnfollow = async () => {
     try {
-      const response = await fetch(`/api/users/unfollow/${userId}`, {
+      const response = await fetch(`${API_BASE}/api/users/unfollow/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -19,10 +19,11 @@ const ProfilePage = () => {
     const [showFollowing, setShowFollowing] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
     const shareUrl = window.location.href;
+    const API_BASE = process.env.REACT_APP_API_URL;
 
     const fetchCurrentUser = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/users/myprofile`, {
+            const response = await fetch(`${API_BASE}/api/users/myprofile`, {
                 method: 'GET',
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });
@@ -39,7 +40,7 @@ const ProfilePage = () => {
     };
 
     const checkFollowStatus = async () => {
-        const response = await fetch(`/api/users/isFollowing/${id}`,{
+        const response = await fetch(`${API_BASE}/api/users/isFollowing/${id}`,{
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
         });
@@ -53,7 +54,7 @@ const ProfilePage = () => {
     };
 
     const fetchFollowers = async () => {
-        const response = await fetch(`/api/users/followers/${id}`, {
+        const response = await fetch(`${API_BASE}/api/users/followers/${id}`, {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -70,7 +71,7 @@ const ProfilePage = () => {
         }
     };
     const fetchFollowing = async () => {
-        const response = await fetch(`/api/users/following/${id}`, {
+        const response = await fetch(`${API_BASE}/api/users/following/${id}`, {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -88,7 +89,7 @@ const ProfilePage = () => {
     };
 
     const getUserPosts = async () => {
-        const response = await fetch(`/api/media/user/${id}`, {
+        const response = await fetch(`${API_BASE}/api/media/user/${id}`, {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -106,7 +107,7 @@ const ProfilePage = () => {
     };
 
     const getUserData = async () => {
-        const response = await fetch(`/api/users/user/${id}`, {
+        const response = await fetch(`${API_BASE}/api/users/user/${id}`, {
             method: 'GET',
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         });
@@ -125,7 +126,7 @@ const ProfilePage = () => {
 
     const handleLikeChange = async (postId) => {
         try {
-            const response = await fetch(`/api/media/like/${postId}`, {
+            const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
                 method: 'POST',
                 headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             });

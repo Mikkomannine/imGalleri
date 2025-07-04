@@ -1,9 +1,10 @@
 import '../css/profile.css';
 
 function FollowButton({ userId, onFollowChange }) {
+  const API_BASE = process.env.REACT_APP_API_URL;
   const handleFollow = async () => {
     try {
-      const response = await fetch(`/api/users/follow/${userId}`, {
+      const response = await fetch(`${API_BASE}/api/users/follow/${userId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
