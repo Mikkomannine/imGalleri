@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
 
 // Pages
@@ -22,7 +22,7 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
 
           {/* Public routes */}
@@ -46,7 +46,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" />} />
 
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
