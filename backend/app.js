@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const customMiddleware = require("./middleware/customMiddleware");
 const mediaRouter = require("./routers/mediaRouter");
 const userRouter = require("./routers/userRouter");
+const path = require("path");
 
 // express app
 const app = express();
