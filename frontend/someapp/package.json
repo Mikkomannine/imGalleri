@@ -24,6 +24,13 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "render": {
+  "staticPublish": {
+    "routes": {
+      "/**": "index.html"
+    }
+  }
+},
   "eslintConfig": {
     "extends": [
       "react-app",
