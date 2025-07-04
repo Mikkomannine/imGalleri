@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import '../css/resetPassword.css';
+import { Link } from 'react-router-dom';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -29,6 +30,9 @@ const ForgotPassword = () => {
           required
         />
         <button type="submit">Send Reset Link</button>
+        <div className="form-footer">
+            <Link to="/login">Log In</Link>
+        </div>
       </form>
       <p>{msg}</p>
     </div>

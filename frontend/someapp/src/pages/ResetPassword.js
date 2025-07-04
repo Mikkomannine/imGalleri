@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const ResetPassword = () => {
   const { token } = useParams();
@@ -30,6 +31,9 @@ const ResetPassword = () => {
           required
         />
         <button type="submit">Reset Password</button>
+        <div className="form-footer">
+            <Link to="/login">Log In</Link>
+        </div>
       </form>
       <p>{msg}</p>
     </div>

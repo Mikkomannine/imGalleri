@@ -232,7 +232,8 @@ const forgotPassword = async (req, res) => {
 
     await sendResetEmail(user.email, resetLink);
   
-    res.send("Password reset link sent");
+    res.status(200).json({ message: "Password reset link sent" });
+
   }  
 
   const resetPassword = async (req, res) => {
@@ -260,7 +261,8 @@ const forgotPassword = async (req, res) => {
     user.resetTokenExpiry = undefined;
     await user.save();
   
-    res.send({ message: "Password reset successful" });
+    res.status(200).json({ message: "Password reset successfull" });
+
   };
   
   
