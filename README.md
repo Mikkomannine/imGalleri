@@ -8,6 +8,10 @@ imGalleri is a social media application that allows users to share and explore i
 - Commenting and liking posts
 - Explore and following pages
 - Password reset via email
+
+Sign up here and try it out yourself:
+https://imgalleri.onrender.com/#/signup
+
 ## Technologies
 
 - Node.js
