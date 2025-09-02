@@ -18,6 +18,7 @@ const ProfilePage = () => {
     const [showFollowers, setShowFollowers] = useState(false);
     const [showFollowing, setShowFollowing] = useState(false);
     const [currentUserId, setCurrentUserId] = useState(null);
+    const [isLiked, setisLiked] = useState(false);
     const shareUrl = window.location.href;
     const API_BASE = process.env.REACT_APP_API_URL;
 
@@ -124,33 +125,8 @@ const ProfilePage = () => {
         }
     };
 
-    const handleLikeChange = async (postId) => {
-        try {
-            const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
-                method: 'POST',
-                headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-            });
-            if (response.status === 401) {
-                localStorage.removeItem('token');
-                window.location.href = '/login';
-                return;
-            }
-            if (!response.ok) throw new Error('Failed to like/unlike the post');
-            setPosts((prevPosts) =>
-                prevPosts.map((post) =>
-                    post._id === postId
-                        ? {
-                            ...post,
-                            likes: post.likes.includes(currentUserId)
-                                ? post.likes.filter((id) => id !== currentUserId)
-                                : [...post.likes, currentUserId]
-                        }
-                        : post
-                )
-            );
-        } catch (error) {
-            console.error('Error liking/unliking post:', error);
-        }
+    const handleLikeChange = () => {
+        setisLiked(!isLiked);
     };
 
     const handleFollowChange = () => {
@@ -165,7 +141,7 @@ const ProfilePage = () => {
         getUserPosts();
         getUserData();
         fetchFollowing();
-    }, [id]);
+    }, [id, isLiked]);
 
     if (!user || !currentUserId) return <div className='loading'><img src="/images/photo-gallery.png" alt="Loading..." /><p>Loading...</p></div>;
 
@@ -214,7 +190,7 @@ const ProfilePage = () => {
                         userId={user._id}
                         username={user.username}
                         shareUrl={shareUrl}
-                        handleLikeChange={() => handleLikeChange(post._id)}
+                        handleLikeChange={handleLikeChange}
                     />
                 ))}
             </div>

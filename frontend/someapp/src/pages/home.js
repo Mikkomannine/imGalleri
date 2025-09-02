@@ -8,16 +8,20 @@ const Home = () => {
     const [posts, setPosts] = useState([]);
     const [currentUserId, setCurrentUserId] = useState(null);
     const API_BASE = process.env.REACT_APP_API_URL;
+    const [isLiked, setisLiked] = useState(false);
 
+
+    const token = localStorage.getItem("token");
+    const config = {
+        method: "GET",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
+    };
    useEffect(() => {
         const fetchCurrentUser = async () => {
             try {
-                const response = await fetch(`${API_BASE}/api/users/myprofile`, {
-                    method: 'GET',
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`,
-                    },
-                });
+                const response = await fetch(`${API_BASE}/api/users/myprofile`, config);
                 if (response.status === 401) {
                     localStorage.removeItem('token');
                     window.location.href = '/login';
@@ -33,13 +37,6 @@ const Home = () => {
     }, []);
 
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        const config = {
-            method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
         const fetchPosts = async () => {
             const response = await fetch(`${API_BASE}/api/media`, config);
             if (response.status === 401) {
@@ -55,35 +52,14 @@ const Home = () => {
             setPosts(data);
         };
         fetchPosts();
-    }, []);
+    }, [isLiked]);
 
-    const handleLikeChange = async (postId) => {
-        try {
-            const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`,
-                },
-            });
-            if (response.status === 401) {
-                localStorage.removeItem('token');
-                window.location.href = '/login';
-                return;
-            }
-            if (!response.ok) {
-                throw new Error('Failed to like/unlike the post');
-            }
-            setPosts((prevPosts) =>
-                prevPosts.map((post) =>
-                    post._id === postId
-                        ? { ...post, likes: post.likes.includes(currentUserId) ? post.likes.filter((id) => id !== currentUserId) : [...post.likes, currentUserId] }
-                        : post
-                )
-            );
-        } catch (error) {
-            console.error('Error liking/unliking post:', error);
-        }
+    const handleLikeChange = () => {
+        setisLiked(!isLiked);
     };
+
+
+
 
 if (!posts) return <div className='loading'><img src="/images/photo-gallery.png"></img><p>Loading...</p></div>;
 
@@ -98,12 +74,13 @@ if (!posts) return <div className='loading'><img src="/images/photo-gallery.png"
                         likes={post.likes}
                         userId={post.user_id}
                         shareUrl={`${window.location.origin}/post/${post._id}`}
-                        handleLikeChange={() => handleLikeChange(post._id)}
+                        handleLikeChange={handleLikeChange}
                     />
             ))}
             </div>
     </div>
-    );
-    };
+);
+}
+
 
 export default Home;

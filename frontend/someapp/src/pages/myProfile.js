@@ -18,6 +18,7 @@ const MyProfile = () => {
   const [editPost, setEditPost] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [isLiked, setisLiked] = useState(false);
   const shareUrl = window.location.href;
   const API_BASE = process.env.REACT_APP_API_URL;
 
@@ -122,32 +123,12 @@ const MyProfile = () => {
       };
       getPosts();
     }
-  }, [user]);
+  }, [user, isLiked]);
 
-  const handleLikeChange = async (postId) => {
-    try {
-      const response = await fetch(`${API_BASE}/api/media/like/${postId}`, {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
+    const handleLikeChange = () => {
+        setisLiked(!isLiked);
+    };
 
-      if (!response.ok) {
-        throw new Error('Failed to like/unlike the post');
-      }
-
-      setPostArray((prevPosts) =>
-        prevPosts.map((post) =>
-          post._id === postId
-            ? { ...post, likes: post.likes.includes(user._id) ? post.likes.filter((id) => id !== user._id) : [...post.likes, user._id] }
-            : post
-        )
-      );
-    } catch (error) {
-      console.error('Error liking/unliking post:', error);
-    }
-  };
 
   const handleDeletePost = async (mediaId) => {
     if (!window.confirm('Are you sure you want to delete this post?')) {
@@ -266,7 +247,7 @@ const handleEditSubmit = async (e) => {
               userId={user._id}
               username={user.username}
               shareUrl={shareUrl}
-              handleLikeChange={() => handleLikeChange(post._id)}
+              handleLikeChange={handleLikeChange}
             />
             <div className="buttons">
               <button
