@@ -13,7 +13,6 @@
   border-radius: 8px;
   text-align: center;
   max-width: 400px;
-  height: 500px;
   margin: 60px;
 }
 .login-section {
@@ -23,7 +22,7 @@
   padding: 20px;
   border-radius: 8px;
   background-color: #e4f6ff;
-  height: 500px;
+  min-height: 400px;
   min-width: 300px;
   margin: 60px;
 }

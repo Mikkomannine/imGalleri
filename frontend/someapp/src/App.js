@@ -13,6 +13,8 @@ import Post from './pages/post';
 import ProfilePage from './pages/profile';
 import EditProfilePage from './pages/EditProfilePage';
 import Following from './pages/Following';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
 
 // Layout
 import Layout from './components/layout';
@@ -30,6 +32,8 @@ function App() {
           <Route path="/signup" element={<Signup setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
 
           {/* Protected routes wrapped in Layout */}
           <Route element={isAuthenticated ? <Layout /> : <Navigate to="/login" />}>

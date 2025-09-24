@@ -2,12 +2,16 @@ import useField from "../hooks/useField";
 import useLogin from "../hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import '../css/login.css';
+import '../css/legal.css';
 
 const Login = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const username = useField("username");
   const password = useField("password");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [termsError, setTermsError] = useState("");
 
   const API_BASE = process.env.REACT_APP_API_URL;
 
@@ -15,6 +19,13 @@ const Login = ({ setIsAuthenticated }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    
+    if (!acceptedTerms) {
+      setTermsError("You must accept the Privacy Policy and Terms of Service to continue.");
+      return;
+    }
+    
+    setTermsError("");
     await login({ username: username.value, password: password.value });
     if (!error && localStorage.getItem("token")) {
       setIsAuthenticated(true);
@@ -49,7 +60,29 @@ const Login = ({ setIsAuthenticated }) => {
             required=""
             {...password}
           />
+          
+          <div className="legal-acceptance">
+            <input 
+              type="checkbox" 
+              id="acceptTerms"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+            />
+            <label htmlFor="acceptTerms">
+              I agree to the{" "}
+              <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer">
+                Privacy Policy
+              </Link>
+              {" "}and{" "}
+              <Link to="/terms-of-service" target="_blank" rel="noopener noreferrer">
+                Terms of Service
+              </Link>
+            </label>
+          </div>
+          {termsError && <div className="legal-error">{termsError}</div>}
+          
           <button type="submit">Login</button>
+          
           <div className="form-footer">
             <p>Don’t have an account?</p>
             <Link to="/signup">Sign up</Link>
