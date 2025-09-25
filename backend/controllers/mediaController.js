@@ -176,18 +176,6 @@ const getMediaByFollowing = async (req, res) => {
 }
 }
 
-const deleteAllMedia = async (req, res) => {
-  try {
-    await Media.deleteMany();
-    res.status(200).json({ message: 'All Media deleted successfully' });
-  } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      return res.status(401).json({ error: 'Token expired' });
-    }
-    console.error(error);
-    res.status(500).json({ error: 'Server Error' });
-  }
-}
 const addComment = async (req, res) => {
   const { text } = req.body;
   const mediaId = req.params.id;
@@ -369,7 +357,6 @@ module.exports = {
   getMedia,
   deleteMedia,
   updateMedia,
-  deleteAllMedia,
   addComment,
   getComments,
   deleteComment,

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllMedia, addMedia, getMedia, deleteMedia, updateMedia, getUsersMedia, deleteAllMedia, addComment, getComments, deleteComment, likePost, unlikePost, checkLikeStatus, getMediaByFollowing } = require('../controllers/mediaController');
+const { getAllMedia, addMedia, getMedia, deleteMedia, updateMedia, getUsersMedia, addComment, getComments, deleteComment, likePost, unlikePost, checkLikeStatus, getMediaByFollowing } = require('../controllers/mediaController');
 const requireAuth = require('../middleware/requireAuth')
 const multer = require('multer');
 
@@ -14,8 +14,6 @@ router.get('/', getAllMedia);
 router.get('/:id', getMedia);
 
 router.get('/user/:id', getUsersMedia);
-
-router.delete('/deleteAll', deleteAllMedia)
 
 router.get('/comments/:id', getComments);
 
