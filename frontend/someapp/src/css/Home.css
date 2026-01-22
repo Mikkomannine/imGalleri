@@ -34,7 +34,7 @@
     transform: scale(1.02);
 }
 
-@media (max-width: 400px) {
+@media (max-width: 750px) {
     .home {
         flex-direction: column;
         height: auto;
