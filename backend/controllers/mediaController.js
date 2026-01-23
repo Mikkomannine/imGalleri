@@ -3,7 +3,7 @@ const Media = require('../models/mediaModel');
 const s3Upload = require('../config/s3Upload');
 const generateSignedUrl = require('../config/generateSignedUrl');
 const User = require('../models/userModel');
-
+const deleteFileFromS3 = require('../config/deleteFileFromS3');
 
 const getAllMedia = async (req, res) => {
   try {
@@ -30,11 +30,9 @@ const getUsersMedia = async (req, res) => {
 
   try {
     const mediaArray = await Media.find({user_id}).sort({createdAt: -1});
-    console.log("media", mediaArray);
 
     for (let media of mediaArray) {
       if (media.imageKey) {
-        console.log(media.imageKey);
         const imageUrl = await generateSignedUrl(media.imageKey);
         media.imageUrl = imageUrl; 
       } else {
@@ -99,12 +97,15 @@ const deleteMedia = async (req, res) => {
   const {mediaId} = req.params;
   try {
     const user_id = req.user._id;
-    console.log("mediaId: ", mediaId);
-    console.log("user_id: ", user_id);
     const media = await Media.findOneAndDelete({ _id: mediaId, user_id: user_id });
     if (!media) {
       return res.status(404).json({ message: 'Media not found' });
     }
+    
+    if (media.imageKey) {
+        await deleteFileFromS3(media.imageKey);
+    }
+    
     res.status(200).json({ message: 'Media deleted successfully' });
   } catch (error) {
     if (error.name === 'TokenExpiredError') {
@@ -139,7 +140,6 @@ const updateMedia = async (req, res) => {
 
 const getMediaByFollowing = async (req, res) => {
   try {
-    console.log("getMediaByFollowing called");
     const userId = req.user._id;
 
     const user = await User.findById(userId).select('following');
@@ -187,8 +187,7 @@ const addComment = async (req, res) => {
 
   try {
       const media = await Media.findById(mediaId);
-      console.log("mediaId: ", mediaId);
-      console.log("userId: ", userId);
+
       if (!media) {
           return res.status(404).json({ message: 'Media not found' });
       }
@@ -246,8 +245,6 @@ const deleteComment = async (req, res) => {
     if (comment.postedBy.toString() !== userId.toString()) {
       return res.status(403).json({ message: 'Not authorized to delete this comment' });
     }
-    console.log("commentIndex", commentIndex);
-    console.log("comment", comment);
 
     media.comments.splice(commentIndex, 1);
     await media.save();

@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 const sendResetEmail = require('../config/sendResetEmail')
 const validator = require('validator')
+const deleteFileFromS3 = require('../config/deleteFileFromS3')
 
 const createToken = (_id) => {
   return jwt.sign({_id}, process.env.SECRET, { expiresIn: '5h' })
@@ -135,6 +136,12 @@ const checkFollowStatus = async (req, res) => {
 
 const imageUpload = async (req, res) => {
     try {
+        const oldImageKey = req.user.imageKey;
+
+        if (oldImageKey) {
+            await deleteFileFromS3(oldImageKey);
+        }
+
         const uploadResult = await s3Upload(req.file);
         const fileKey = uploadResult.Key;
 
@@ -251,7 +258,6 @@ const forgotPassword = async (req, res) => {
     }
   
     if (!validator.isStrongPassword(newPassword)) {
-      console.log("Weak password:", newPassword);
       return res.status(400).send("Password not strong enough");
     }
   
