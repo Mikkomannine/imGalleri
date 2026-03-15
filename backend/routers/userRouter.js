@@ -15,13 +15,13 @@ router.post('/login', loginUser)
 
 router.post('/signup', signupUser)
 
-router.get('/myprofile', getMe)
-
 router.post("/forgot-password", forgotPassword)
 
 router.post("/reset-password/:token", resetPassword)
 
 router.use(requireAuth);
+
+router.get('/myprofile', getMe)
 
 router.get('/user/:id', getUser)
 
