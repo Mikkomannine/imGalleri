@@ -161,12 +161,9 @@ const imageUpload = async (req, res) => {
     }
 };
 
-const getMe = async (req, res, next) => {
-    const { authorization } = req.headers;
-    const token = authorization.split(' ')[1];
+const getMe = async (req, res) => {
     try {
-        const { _id } = jwt.verify(token, process.env.SECRET);
-        const user = await User.findOne({ _id }).select('-password');
+        const user = await User.findOne({ _id: req.user._id }).select('-password');
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

@@ -11,8 +11,26 @@ const app = express();
 
 connectDB();
 
+if (!process.env.CORS_ORIGINS) {
+	throw new Error("CORS_ORIGINS environment variable is not set");
+}
+
+const allowedOrigins = process.env.CORS_ORIGINS.split(",")
+	.map((origin) => origin.trim())
+	.filter(Boolean);
+
 // middleware
-app.use(cors());
+app.use(
+	cors({
+		origin: (origin, callback) => {
+			if (!origin || allowedOrigins.includes(origin)) {
+				return callback(null, true);
+			}
+
+			return callback(new Error("Not allowed by CORS"));
+		},
+	})
+);
 app.use(express.json());
 
 app.use(customMiddleware.requestLogger);
