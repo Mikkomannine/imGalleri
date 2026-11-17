@@ -54,7 +54,7 @@ const UpdateProfile = () => {
             alert(`Bio exceeds ${characterLimit} characters!`);
             return;
         }
-        if (firstName.length > 20 || lastName.length > 20 || phoneNumber.length > 20 || email.length > 20) {
+        if ((firstName || "").length > 20 || (lastName || "").length > 20 || String(phoneNumber ?? "").length > 15 || (email || "").length > 254) {
             alert(`Input exceeds 20 characters!`);
             return;
         }

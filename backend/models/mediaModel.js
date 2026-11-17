@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const { use, post } = require('../app');
 
 
 const mediaSchema = new mongoose.Schema({
@@ -17,4 +16,3 @@ const mediaSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 module.exports = mongoose.model('Media', mediaSchema);
-
