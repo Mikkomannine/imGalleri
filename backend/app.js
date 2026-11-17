@@ -1,15 +1,12 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-const connectDB = require("./config/db");
 const customMiddleware = require("./middleware/customMiddleware");
 const mediaRouter = require("./routers/mediaRouter");
 const userRouter = require("./routers/userRouter");
 
 // express app
 const app = express();
-
-connectDB();
 
 if (!process.env.CORS_ORIGINS) {
 	throw new Error("CORS_ORIGINS environment variable is not set");

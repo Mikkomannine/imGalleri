@@ -1,4 +1,4 @@
-const AWS = require('aws-sdk');
+const AWS = require('./awsConfig');
 const s3 = new AWS.S3();
 
 const deleteFileFromS3 = async (key) => {
