@@ -15,7 +15,7 @@ export const SearchBar = ({ setResults }) => {
       .then((response) => {
         if (response.status === 401) {
           localStorage.removeItem("token");
-          window.location.href = "/login";
+          window.location.hash = "#/login";
           return Promise.reject("Unauthorized");
         }
         return response.json();

@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const { getAllMedia, addMedia, getMedia, deleteMedia, updateMedia, getUsersMedia, addComment, getComments, deleteComment, likePost, unlikePost, checkLikeStatus, getMediaByFollowing } = require('../controllers/mediaController');
-const requireAuth = require('../middleware/requireAuth')
-const multer = require('multer');
+const requireAuth = require('../middleware/requireAuth');
+const uploadImage = require('../middleware/uploadImage');
+const validateObjectId = require('../middleware/validateObjectId');
 
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
+router.param('id', validateObjectId);
+router.param('mediaId', validateObjectId);
+router.param('commentId', validateObjectId);
 
 router.get('/', getAllMedia);
 
@@ -27,7 +27,7 @@ router.post('/addComment/:id', addComment);
 
 router.delete('/delete/:mediaId/:commentId', deleteComment);
 
-router.post('/', upload.single('image'), addMedia);
+router.post('/', uploadImage('image'), addMedia);
 
 router.delete('/delete/:mediaId', deleteMedia);
 

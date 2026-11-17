@@ -1,23 +1,22 @@
 const express = require('express')
 const requireAuth = require('../middleware/requireAuth')
+const uploadImage = require('../middleware/uploadImage')
+const validateObjectId = require('../middleware/validateObjectId')
+const { authLimiter, passwordResetEmailLimiter } = require('../middleware/rateLimit')
 
 const { loginUser, signupUser, followUser, unFollowUser, getFollowers, imageUpload, getMe, checkFollowStatus, getUser, updateUser, forgotPassword, resetPassword, getFollowing } = require('../controllers/userController')
 
-
-const multer = require('multer');
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
 const router = express.Router()
 
-router.post('/login', loginUser)
+router.param('id', validateObjectId)
 
-router.post('/signup', signupUser)
+router.post('/login', authLimiter, loginUser)
 
-router.post("/forgot-password", forgotPassword)
+router.post('/signup', authLimiter, signupUser)
 
-router.post("/reset-password/:token", resetPassword)
+router.post("/forgot-password", passwordResetEmailLimiter, forgotPassword)
+
+router.post("/reset-password/:token", authLimiter, resetPassword)
 
 router.use(requireAuth);
 
@@ -33,7 +32,7 @@ router.get("/followers/:id", getFollowers)
 
 router.get('/following/:id', getFollowing)
 
-router.patch('/upload', upload.single('image'), imageUpload)
+router.patch('/upload', uploadImage('image'), imageUpload)
 
 router.patch('/:id/edit', updateUser)
 

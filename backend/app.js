@@ -1,7 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const customMiddleware = require("./middleware/customMiddleware");
+const { apiLimiter } = require("./middleware/rateLimit");
 const mediaRouter = require("./routers/mediaRouter");
 const userRouter = require("./routers/userRouter");
 
@@ -17,23 +19,25 @@ const allowedOrigins = process.env.CORS_ORIGINS.split(",")
 	.filter(Boolean);
 
 // middleware
+app.use(helmet());
 app.use(
 	cors({
-		origin: (origin, callback) => {
-			if (!origin || allowedOrigins.includes(origin)) {
-				return callback(null, true);
-			}
-
-			return callback(new Error("Not allowed by CORS"));
-		},
+		// Unknown origins get no CORS headers (the browser blocks the response)
+		// instead of a 500 error. Requests without an Origin header (curl,
+		// server-to-server) are not subject to CORS at all.
+		origin: (origin, callback) => callback(null, !origin || allowedOrigins.includes(origin)),
+		methods: ["GET", "POST", "PATCH", "DELETE"],
+		allowedHeaders: ["Content-Type", "Authorization"],
+		maxAge: 600,
 	})
 );
-app.use(express.json());
+app.use(express.json({ limit: "100kb" }));
 
 app.use(customMiddleware.requestLogger);
 
 app.get("/", (req, res) => res.send("API Running!"));
 
+app.use("/api", apiLimiter);
 app.use("/api/media", mediaRouter);
 app.use("/api/users", userRouter);
 

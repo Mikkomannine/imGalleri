@@ -38,17 +38,29 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
+// Client errors raised by express.json() keep their status; everything else is
+// logged server-side and returned as a generic 500 without internal details.
 const errorHandler = (error, request, response, next) => {
-  console.error(error.message);
+  if (error.type === "entity.parse.failed") {
+    return response.status(400).json({ error: "Malformed JSON body" });
+  }
+  if (error.type === "entity.too.large") {
+    return response.status(413).json({ error: "Request body too large" });
+  }
 
-  response.status(500);
-  response.json({
-    message: error.message,
-  });
+  console.error(error);
+  response.status(500).json({ error: "Server Error" });
+};
+
+// Shared 500 response for controllers' catch blocks.
+const serverError = (response, error) => {
+  console.error(error);
+  return response.status(500).json({ error: "Server Error" });
 };
 
 module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
+  serverError,
 };
